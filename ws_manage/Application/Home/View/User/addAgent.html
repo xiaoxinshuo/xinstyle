@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>添加代理</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/global.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order-detail.css">
+    <style type="text/css">
+        .order-entry-name{width: 30%}
+        .order-entry-price{width: 70%}
+        .order-entry-price input,.order-entry-price select{
+            border:none;height: 34px;width: 100%;
+        }
+    </style>
+    <script src="__PUBLIC__/Home/js/jquery.min.js"></script>
+</head>
+<body>
+<header id="header" class="header page-header">
+    <a class="j-back-link back-wrap" href="javascript:history.back(-1)" >
+        <i class="icon i-back"></i><span class="goback">返回</span>
+    </a>
+    <h1 class="j-page-name page-name">添加代理</h1>
+</header>
+<!-- 代码部分begin -->
+
+    <div id="address-wrap" class="order-region" style="padding-bottom: 65px;">
+        <h1 class="order-region-title" style="color: #fe4d3d;">
+
+        </h1>
+        <ul class="order-region-entries" id="food-items">
+
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*姓名</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写真实姓名" id="name" name="name" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*电话</span>
+                <span class="order-entry-price">
+			    	<input type="hidden" id="id" name="id" value="">
+			    	<input type="hidden" id="parentId" name="parentId" value="26e503f19f4b43c58a01feccaefe456e">
+			    	<input type="text" placeholder="请填写真实电话（登录账号使用）" id="phone" name="phone" value="">
+			    </span>
+            </li>
+            <!--<li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*验证码</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写验证码" id="vcode" name="vcode" value="">
+			    	<input type="button"  id="vcodebtn" name="vcodebtn" value="获取验证码" onclick="sendVCode(this,'phone',120)">
+			    </span>
+            </li>-->
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*账号</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写账号" id="user_no" name="user_no" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*密码</span>
+                <span class="order-entry-price">
+			    	<input type="password" placeholder="请填写密码" id="password" name="password" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*确认密码</span>
+                <span class="order-entry-price">
+			    	<input type="password" placeholder="请填写确认密码" id="verifyPassword" name="verifyPassword" value="">
+			    </span>
+            </li>
+            <!--<li class="order-region-entry">-->
+                <!--<span class="order-entry-name text-overflow-ellipsis-2">*开户银行</span>-->
+                <!--<span class="order-entry-price">-->
+			    	<!--<select id="bankName" name="bankName" >-->
+                        <!--<option value="">选择开户银行</option>-->
+                        <!--<?php foreach ($bankList as $k=>$v): ?>-->
+			    		<!--<option value="{$v.bank_no}">{$v.bank_name}</option>-->
+                        <!--<?php endforeach; ?>-->
+
+					<!--</select>-->
+			    <!--</span>-->
+            <!--</li>-->
+            <!--<li class="order-region-entry">-->
+                <!--<span class="order-entry-name text-overflow-ellipsis-2">*银行卡号</span>-->
+                <!--<span class="order-entry-price">-->
+			    	<!--<input type="text" placeholder="请填写银行卡号" id="bankNum" name="bankNum" value="">-->
+			    <!--</span>-->
+            <!--</li>-->
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*真实姓名</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写真实姓名" id="bankUserName" name="bankUserName" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*支付宝</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写与姓名相同的支付宝账号" id="alipayAccount" name="alipayAccount" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*微信号</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写真实微信号" id="wxAccount" name="wxAccount" value="">
+			    </span>
+            </li>
+            <input type="hidden" id="erweima" value="{$erweima}">
+            <input type="hidden" id="recommender_id" value="{$recommender_id}">
+            <!--<li class="order-region-entry">-->
+                <!--<span class="order-entry-name text-overflow-ellipsis-2">邮箱</span>-->
+                <!--<span class="order-entry-price">-->
+			    	<!--<input type="text" placeholder="请填写邮箱" id="email" name="email" value="">-->
+			    <!--</span>-->
+            <!--</li>-->
+        </ul>
+    </div>
+<div class="order-btn-field">
+    <input id="order-submit" class="combtn order-btn" type="button" value="保存" onclick="submit();">
+</div>
+
+<script type="text/javascript">
+    var sub = true;
+    function submit(){
+        $('#order-submit').attr({"disabled":"disabled"});
+        var name=$("#name").val();
+        var erweima=$("#erweima").val();
+        var recommender_id=$("#recommender_id").val();
+        if(name==""){
+            alert("姓名不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+        var phone=$("#phone").val();
+        if(phone==""){
+            alert("手机号不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        var mobile_reg=/^1[34578]\d{9}$/;
+
+        if(!mobile_reg.test(phone)){
+            alert("手机号格式错误");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        var user_no=$("#user_no").val();
+        if(user_no==""){
+            alert("账号不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        var password=$("#password").val();
+        if(password==""){
+            alert("密码不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+        if(password.length <=5){
+            alert("密码必须不小于6位");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        var verifyPassword=$("#verifyPassword").val();
+        if(verifyPassword==""){
+            alert("确认密码不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+        if(verifyPassword != password){
+            alert("确认密码必须和密码相同");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        /*var bankName=$("#bankName").val();
+        if(bankName==""){
+            alert("开户银行不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        var bankNum=$("#bankNum").val();
+        if(bankNum==""){
+            alert("银行卡号不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }*/
+
+        var bankUserName=$("#bankUserName").val();
+        if(bankUserName==""){
+            alert("真实姓名不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        var alipayAccount=$("#alipayAccount").val();
+        if(alipayAccount==""){
+            alert("支付宝账号不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        var wxAccount=$("#wxAccount").val();
+        if(wxAccount==""){
+            alert("微信号不能为空");
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+
+        //var email=$("#email").val();
+        /*if(email!=""){
+            var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+            if(!myreg.test(email)){
+                alert('请输入有效的邮箱！');
+                $("#order-submit").removeAttr("disabled");
+                return false;
+            }
+        }*/
+
+        if(!sub){
+            $("#order-submit").removeAttr("disabled");
+            return;
+        }
+        sub = false;
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url:"/index.php/User/addAgentOp",
+            data:{
+                name:name,
+                phone:phone,
+                user_no:user_no,
+                password:password,
+                //bankName:bankName,
+                //bankNum:bankNum,
+                bankUserName:bankUserName,
+                alipayAccount:alipayAccount,
+                wxAccount:wxAccount,
+                recommender_id:recommender_id,
+                erweima:erweima
+                //email:email
+            },
+            error: function(request) {
+                sub = true;
+                alert("Connection error");
+                $("#order-submit").removeAttr("disabled");
+            },
+            success: function(data) {
+                sub = true;
+                if (data.status == 1) {
+                    alert('添加成功');
+                    $("#order-submit").removeAttr("disabled");
+                    if (erweima == 0){
+                        location.href = "/index.php/User/index";
+                    }
+                };
+                if(data.status == 0){
+                    alert(data.msg);
+                    $("#order-submit").removeAttr("disabled");
+                }
+            }
+        });
+    }
+
+    //开始倒计时
+    function settime(obj,countdown) {
+        if (countdown == 0) {
+            obj.removeAttr("disabled");
+            obj.removeClass("disabled");
+            obj.val("获取验证码");
+            return;
+        } else {
+            obj.val("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() { settime(obj,countdown) },1000) 	// 每1000毫秒执行一次
+    }
+
+
+    /**
+     * Todo 点击发送验证码
+     * @param obj 被点击按钮
+     * @param account 发送验证码账号
+     * @param accountType 1-手机 2邮箱
+     * @param countdown 倒计时秒数
+     */
+    function sendVCode(obj,accountInputId,countdown){
+        var account = $("#"+accountInputId).val();
+        if(account == ""){
+            alert("请输入手机号码");
+            return;
+        }
+        if(!validatorPhone(account)){
+            alert("手机号码格式错误");
+            return;
+        }
+        $(obj).addClass("disabled");
+        $(obj).attr("disabled", true);
+        $(obj).val("发送中...");
+        $.post("__PUBLIC__/Home/a/mobile/send/sendVCode",{phone:account,type:1}, function(data){
+            console.log(data);
+            if(data.success == true){
+                settime($(obj),countdown);//开始倒计时
+            }else{
+                alert("获取验证码失败，请稍后再试");
+                $(obj).removeClass("disabled");
+                $(obj).attr("disabled", false);
+                $(obj).val("重新获取");
+            }
+        });
+
+    }
+    // 验证是否是电话号码
+    function validatorPhone(phone){
+        var phoneRegex = /^1[34578]\d{9}$/;
+        return phoneRegex.test(phone);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>订单列表</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/css/Jingle.css" media="all"/>
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order-detail.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order-list.css">
+    <script src="__PUBLIC__/Home/js/jquery.min.js"></script>
+    <style type="text/css">
+        ul.ordTab {
+            position:relative;
+            width:100%;
+            text-align: center;
+            z-index: 1;
+        }
+        ul.ordTab li{
+            font-size: 16px;
+            width: 25%;
+            text-align: center;
+            float: left;
+            cursor: pointer;
+            list-style: none;
+            border: 1px solid #cacaca;
+            height: 40px;
+            line-height: 40px;
+        }
+        .noSelecd{
+
+            background-color: #fff;
+            color: #666;
+        }
+        .selecd{
+            background: red;
+            color: #fff;
+            border-top: none;
+        }
+        .delOrder{
+            z-index:1;
+        }
+        .list{
+            margin-top: 40px;
+        }
+    </style>
+
+    <script>
+        Date.prototype.format = function(format) {
+            var date = {
+                "M+": this.getMonth() + 1,
+                "d+": this.getDate(),
+                "h+": this.getHours(),
+                "m+": this.getMinutes(),
+                "s+": this.getSeconds(),
+                "q+": Math.floor((this.getMonth() + 3) / 3),
+                "S+": this.getMilliseconds()
+            };
+            if (/(y+)/i.test(format)) {
+                format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+            }
+            for (var k in date) {
+                if (new RegExp("(" + k + ")").test(format)) {
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                        ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+                }
+            }
+            return format;
+        }
+        var pageNum = Number("1");
+        function pay(no){
+            location.href="/a/alipay/pay?payNo="+no;
+            event.stopPropagation();
+        }
+    </script>
+</head>
+<body >
+<!-- 代码部分begin -->
+<div id="section_container">
+    <section id="index_section" class="active">
+        <header id="header" class="header page-header">
+            <a class="j-back-link back-wrap" href="javascript:history.back(-1)">
+                <i class="icon i-back" style="width: 12px;height: 20px; background-position: 0 -107px;background-image: url(__PUBLIC__/Home/images/icon.png); background-size: 150px 350px; display: inline-block;"></i>
+                <span class="goback">返回</span>
+            </a>
+            <div class="header-right"></div>
+            <h1 class="j-page-name page-name" style="width:50%; margin: 0 25%;">我的订单</h1>
+        </header>
+        <input type="hidden" id = "orderStatus" value = "{$status_type}"/>
+
+        <article class="active" id="scrollWrapper" data-scroll="true" style="background: #eeeeee">
+            <div class="list" >
+                <foreach name="list" item="vo" >
+                <div class="field ordDiv" onclick="javascript:location.href=''">
+                    <div class="field-head clearfix">
+                        <div class="field-head-time">
+                            {$vo.create_time}
+                        </div>
+                        <div class="field-head-status">
+								<span class="field-head-status-light">
+								       {$vo.pay_text}
+								</span>
+                        </div>
+                    </div>
+                    <foreach name="vo.orderItem" item="v" >
+                    <a class="field-item clearfix" href="">
+                        <div class="avatar" style="background-image: url(/userfiles/221f6cbaea38436c9e91cf0c05328c98/images/photo/2017/02/%E5%85%94%E4%B8%81%20(4)_%E5%89%AF%E6%9C%AC.jpg);">
+                            <img src="{$v.image_url}" style="width: 100%;height: 100%;" class="j-avatar-img avatar-img" onerror="javascript:this.src='';">
+                        </div>
+                        <div class="content">
+                            <div class="na text-overflow-ellipsis-2">{$v.good_name}</div>
+                            <div class="price">{$v.price} x {$v.number}</div>
+                        </div>
+                    </a>
+                    </foreach>
+                    <div class="field-console clearfix">
+                        <div class="field-console-btns">
+                            <button style="width: 85px; border: 1px solid #47af4b; color: #47af4b;" class="j-field-pay combtn field-btn wuliu" data-id="{$vo.order_id}">查看物流</button>
+                            <button class="j-field-pay combtn field-btn delOrder" data-id="{$vo.order_id}">删除</button>
+                        </div>
+                    </div>
+                </div>
+                </foreach>
+            </div>
+        </article>
+        <ul class="ordTab">
+            <li ordSts="-1" class="noSelecd" id="sel_-1">全部</li>
+            <li ordSts="1" class="noSelecd " id="sel_1">未支付</li>
+            <li ordSts="2" class="noSelecd " id="sel_2">已支付</li>
+            <li ordSts="3" class="noSelecd " id="sel_3">发货中</li>
+        </ul>
+    </section>
+</div>
+
+<!-- 代码部分end -->
+</body>
+
+<!-- 引入jingle样式 -->
+<link href="__PUBLIC__/Home/css/Jingle.css" rel="stylesheet" />
+
+
+
+<!-- 引入jingle插件 -->
+<script src="__PUBLIC__/Home/js/zepto.js" type="text/javascript"></script>
+<script src="__PUBLIC__/Home/js/iscroll.js" type="text/javascript"></script>
+<script src="__PUBLIC__/Home/js/template-debug.js" type="text/javascript"></script>
+<script src="__PUBLIC__/Home/js/Jingle.debug.js" type="text/javascript"></script>
+<!---PC端测试时需要这个文件，将click事件模拟成touch事件，正式上线删除该js文件即可--->
+<script src="__PUBLIC__/Home/js/zepto.touch2mouse.js" type="text/javascript"></script>
+<!-- 引入jquery插件 -->
+<script src="__PUBLIC__/Home/js/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function(){
+        var status_type = "<?php echo $status_type; ?>"
+        if (status_type > 0){
+            $("#sel_"+status_type).addClass("selecd");
+        }else{
+            $("#sel_-1").addClass("selecd");
+        }
+
+        Jingle.launch();
+        var falg=true;
+
+        var delOrder = function(event){
+
+            alert("删除功能已禁用！");
+            return false;
+            /* var obj = $(this);
+            var ordId = obj.attr("data-id");
+            if(window.confirm('你确定要删除订单吗？')){
+                $.post("/a/mobile/order/delete",{'id':ordId},function(data){
+                    if(data == 'success'){
+                        $("#order_" + ordId).remove();
+                    }else{
+                        alert("删除失败。。。");
+                    }
+                });
+            }
+            event.stopPropagation(); */
+        };
+
+        var wuliu = function(event){
+            var ordId = $(this).attr("data-id");
+            location.href = "/index.php/User/wuliuDetail/oid/"+ordId;
+			return false;
+
+        };
+
+        function wuliuDetail(id){
+			alert(id);
+            location.href = "/index.php/User/wuliuDetail";
+        };
+
+        J.Refresh('#scrollWrapper','pullUp',function (){
+            var scroll = this;
+            if(pageNum==0){
+                $(".refresh-container").hide();
+                return;
+            }
+            /*if(pageNum%5>0){
+                $(".refresh-container").hide();
+                J.Toast.show('success','无更多数据',2000);
+                return;
+            }*/
+            if(falg){
+                falg=false;
+                if (pageNum < 2){
+                    $(".refresh-container").hide();
+                    pageNum=pageNum+1;
+                    falg=true;
+                    return;
+                }else{
+                    var status = $("#orderStatus").val();
+                    $.post("/index.php/User/ajaxOrder",{'page':pageNum,'status':status},function(data){
+                        falg = true;
+                        if (data.status == 1){
+                            $.each(data.list,function(i,item){
+                                var status="";
+
+                                var bottom='<div class="field-console clearfix"><div class="field-console-btns">';
+                                bottom += '<button style="width: 85px; border: 1px solid #47af4b; color: #47af4b;" class="j-field-pay combtn field-btn wuliu" data-id="' + item.order_id + '">查看物流</button>';
+                                bottom += '<button class="j-field-pay combtn field-btn delOrder" data-id="' + item.order_id + '">删除</button>';
+
+                                bottom += '</div></div>';
+                                var dishList="";
+                                $.each(item.orderItem,function(j,jitem){
+                                    dishList+='<a class="field-item clearfix" href="">'
+                                        +'<div class="avatar" style="background-image: url();">'
+                                        +'	<img src="'+jitem.order_id+'" style="width: 100%;height: 100%;" class="j-avatar-img avatar-img" onerror="javascript:this.src=\'\';">'
+                                        +'</div>'
+                                        +'<div class="content">'
+                                        +'	<div class="na text-overflow-ellipsis-2">'+jitem.good_name+'</div>'
+                                        +'	<div class="price"> '+jitem.price+'x '+jitem.number+'</div>'
+                                        +'</div> '
+                                        +'</a>'
+                                });
+
+                                var html='<div class="field" id="order_'+item.order_id+'" onclick="javascript:location.href=\'\'">'
+                                    +'<div class="field-head clearfix">'
+                                    +	'<div class="field-head-time">'+item.create_time+'</div>'
+                                    +	'<div class="field-head-status">'
+                                    +'<span class="field-head-status-light">'+item.pay_text
+                                    +'</span>'
+                                    +'</div>'
+                                    +'</div>'
+                                    +dishList
+                                    +bottom
+                                    +'</div>';
+                                pageNum=pageNum+1;
+                                $(".refresh-container").before(html);
+                            });
+                        }else{
+                            J.Toast.show('success','无更多数据',2000);
+                        }
+
+                        $(".delOrder").off("click").on("click",delOrder);
+                        $(".wuliu").off("click").on("click",wuliu);
+                    });
+                    scroll.refresh();
+                    scroll.scrollToElement("#scrollWrapper .field:nth-last-child(4)",500);
+                }
+
+            }
+        });
+
+        var top = 0 + 'px';
+        $("ul.ordTab").css({'top':top});
+        $(window).resize(function(){
+            top = 0 + 'px';
+            $("ul.ordTab").css({'top':top});
+        });
+        $("ul.ordTab li").click(function(){
+            $(".selecd").removeClass("selecd");
+            $(this).addClass("selecd");
+            $("#orderStatus").val($(this).attr("ordSts"));
+            var status = $("#orderStatus").val();
+
+            window.location.href = "/index.php/User/mimeOrder?status=" + status;
+        });
+        $(".delOrder").off("click").on("click",delOrder);
+        $(".wuliu").off("click").on("click",wuliu);
+    });
+</script>
+</html>

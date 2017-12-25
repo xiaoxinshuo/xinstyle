@@ -1,0 +1,83 @@
+<extend name="Public:index" />
+<block name="main">
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">商品列表</li>
+</ol>
+<div class="tpl-portlet-components">
+    <div class="tpl-block">
+
+        <div class="am-g">
+            <div class="tpl-table-images">
+                <?php foreach($goodsList as $k=>$v): ?>
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="tpl-table-images-content">
+                        <a href="javascript:;" class="tpl-table-images-content-i">
+                            <div class="tpl-table-images-content-i-info">
+
+                            </div>
+                            <span class="tpl-table-images-content-i-shadow"></span>
+                            <img src="{$v.image_url}" alt="" style="width:270px;height:160px" >
+                        </a>
+                        <div class="tpl-table-images-content-block">
+                            <div class="tpl-i-font">
+                                {$v.good_name}-{$v.good_format}g
+                            </div>
+                            <div class="tpl-i-more">
+                                <ul>
+                                    <li><span class=" am-text-warning"> 价格：￥{$v.price}</span></li>
+                                </ul>
+                            </div>
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs tpl-edit-content-btn">
+
+                                    <button type="button" class="am-btn am-btn-default am-btn-secondary" onclick="edit('{$v.good_id}')"><span class="am-icon-edit"></span> 编辑</button>
+
+                                    <button type="button" class="am-btn am-btn-default am-btn-danger" onclick="del('{$v.good_id}')"><span class="am-icon-trash-o"></span> 删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+                <div class="am-u-lg-12">
+                    <div class="am-cf">
+
+                        <div class="am-fr">
+                            {$page}
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="tpl-alert"></div>
+</div>
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+
+<script>
+    function del(id) {
+        $.ajax({
+            url:'/admin.php/Goods/delGood',
+            type:'post',
+            data:
+                {
+                    good_id:id
+                },
+            success:function (result){
+                layer.msg(result.msg);
+                location.reload();
+            }
+        });
+    }
+
+    function edit(id) {
+        location.href = "/admin.php/Goods/edit/good_id/"+id;
+    }
+</script>
+</block>

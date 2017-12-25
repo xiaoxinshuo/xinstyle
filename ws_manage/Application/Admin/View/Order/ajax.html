@@ -1,0 +1,89 @@
+
+<?php switch ($div):case 'orderIndex':?>
+<div class="table-group">
+    <?php foreach($orderList as $v):?>
+    <p><span>订单编号：{$v.order_id}</span> <span>收货人：{$v.receiver_name}</span></p>
+    <table>
+        <thead>
+        <tr>
+            <td>商品名称</td>
+            <td>规格</td>
+            <td>创建时间</td>
+            <td>数量</td>
+            <td>金额（元）</td>
+            <td>交易状态</td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach($v['orderItem'] as $b):?>
+        <tr>
+            <td>{$b.good_name}</td>
+            <td>{$b.good_format}</td>
+            <td>{$v.create_date}</td>
+            <td>{$b.number}</td>
+            <td>{$b.itemPrice}</td>
+            <td class="color">
+                <?php if($v['pay_status'] == 1): ?>
+                未支付
+                <?php elseif($v['pay_status'] == 2):?>
+                已付款
+                <?php endif; ?>
+            </td>
+            <td></td>
+        </tr>
+        <?php endforeach;?>
+        </tbody>
+        <thead>
+        <tr>
+            <td>邮寄地址</td>
+            <td>电话</td>
+            <td>总金额</td>
+            <td>发票</td>
+            <td>支付时间</td>
+            <td>支付方式</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{$v.address}</td>
+            <td>{$v.phone}</td>
+            <td>{$v.money_paid}</td>
+            <td>无</td>
+            <td>{$v.pay_date}</td>
+            <td class="color">
+                微信支付
+            </td>
+            <td>状态</td>
+        </tr>
+        </tbody>
+    </table>
+    <?php endforeach; ?>
+</div>
+<div class="fenye">{$page}</div>
+<script>
+    /*$('.deleteCharge').bind('click',function (){
+        var $this=$(this).parent().parent();
+        layer.confirm('您确定要删除？',{icon: 3,title:'提示'}, function(index){
+            $.ajax({
+                url:'/index.php/Home/Charge/cancelCharge/p/{$p}',
+                type:'post',
+                data:{charge_id:$this.attr('chargeId')},
+                success:function (result){
+                    if (result.status==1){
+                        layer.msg('删除成功');
+                        location.href="/index.php/Home/Charge/index/pas/{$p}";
+                    }else{
+                        layer.msg(result.message);
+                    }
+                }
+            });
+        }, function(){
+            layer.close();
+        });
+    });*/
+
+</script>
+
+<?php break;endswitch;?>

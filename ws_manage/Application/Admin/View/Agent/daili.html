@@ -1,0 +1,235 @@
+<extend name="Public:index" />
+<block name="main">
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">代理列表</li>
+</ol>
+
+<div class="tpl-portlet-components">
+    <?php if($user_id): ?>
+    <div style="position:relative;">
+        <button type="button" onclick="reback()" class="am-btn am-btn-default am-btn-xs am-hide-sm-only">返回</button>
+    </div>
+    <div style="clear: both"></div>
+    <?php endif; ?>
+    <div class="tpl-block">
+        <div class="am-g">
+
+
+            <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+                <div class="am-modal-dialog" style="width: 600px !important;">
+                    <div class="am-modal-hd">编辑
+                        <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+                    </div>
+                    <br>
+                    <div class="am-modal-bd">
+                        <form class="am-form am-form-horizontal">
+                            <div class="am-form-group">
+                                <input type="hidden" id="user_id" value="">
+                                <div class="am-u-sm-4">
+                                    <input type="text" id="user_no" placeholder="账号">
+                                </div>
+                                <div class="am-u-sm-4">
+                                    <input type="text" id="name" placeholder="姓名">
+                                </div>
+                                <div class="am-u-sm-4">
+                                    <input type="text" id="phone" placeholder="电话">
+                                </div>
+                                <div class="am-u-sm-4">
+                                    <input type="password" id="password" placeholder="密码">
+                                </div>
+                                <div class="am-u-sm-4">
+                                    <input type="text"  id="alipayaccount" placeholder="支付宝账号">
+                                </div>
+                                <div class="am-u-sm-4">
+                                    <input type="text"  id="wxaccount" placeholder="微信账号">
+                                </div>
+                            </div>
+                            <button class="am-btn am-btn-primary am-btn-sm" type="button" onclick="save()">确认</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="am-u-sm-12">
+                <form class="am-form">
+                    <table class="am-table am-table-striped am-table-hover table-main">
+                        <thead>
+                        <tr>
+                            <th class="table-id">账号</th>
+                            <th class="table-title">姓名</th>
+                            <th class="table-type">电话</th>
+                            <th class="table-author am-hide-sm-only">上级代理</th>
+                            <th class="table-date am-hide-sm-only">提交日期</th>
+                            <th class="table-date am-hide-sm-only">状态</th>
+                            <th class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach($agentList as $v): ?>
+                        <tr>
+                            <td>{$v.user_no}</td>
+                            <td>{$v.name}</td>
+                            <td>{$v.phone}</td>
+                            <td class="am-hide-sm-only">
+                                <?php if($v['r_name']): ?>
+                                {$v.r_name}({$v.r_user_no})
+                                <?php else: ?>
+                                全国总代
+                                <?php endif; ?>
+                            </td>
+                            <td class="am-hide-sm-only">{$v.check_time}</td>
+                            <td class="am-hide-sm-only">审核通过</td>
+                            <td>
+                                <div class="am-btn-toolbar">
+                                    <div class="am-btn-group am-btn-group-xs">
+                                        <button class="am-btn am-btn-default am-btn-xs am-text-warning " type="button" onclick="edit('{$v.user_no}','{$v.name}','{$v.phone}','{$v.wxaccount}','{$v.alipayaccount}','{$v.user_id}')" data-am-modal="{target: '#doc-modal-1', closeViaDimmer: 0, width: 500, height: 300}"
+                                        type="button"><span class="am-icon-copy"></span> 编辑</button>
+                                        <button class="am-btn am-btn-default am-btn-xs " type="button" data="{$v.user_id}"><span class="am-icon-copy"></span> 冻结</button>
+                                        <button class="am-btn am-btn-default am-btn-xs am-text-danger green" type="button" data="{$v.user_id}"><span class="am-icon-trash-o"></span> 解冻</button>
+                                        <!--<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 编辑</button>-->
+                                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary" type="button" onclick="xiaji('{$v.user_id}')"><span class="am-icon-trash-o"></span> 下级代理</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <tr>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="am-cf">
+                        {$page}
+                    </div>
+                    <hr>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tpl-alert"></div>
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+<script>
+    function reback() {
+        history.go(-1);
+    }
+    
+    function xiaji(uid) {
+        location.href="/admin.php/Agent/daili/uid/"+uid;
+    }
+    
+    $(".red").bind('click',function () {
+        var user_id = $(this).attr('data');
+        $.ajax({
+            url:'/admin.php/Agent/freezeAgent',
+            type:'post',
+            data:
+                {
+                    user_id:user_id
+                },
+            success:function (result){
+                if(result.status == 1){
+                    alert(result.msg);
+                }
+            }
+        });
+    });
+
+    $(".green").bind('click',function () {
+        var user_id = $(this).attr('data');
+        $.ajax({
+            url:'/admin.php/Agent/unfreezeAgent',
+            type:'post',
+            data:
+                {
+                    user_id:user_id
+                },
+            success:function (result){
+                if(result.status == 1){
+                    alert(result.msg);
+                }
+            }
+        });
+    });
+
+    function edit(user_no,name,phone,wxaccount,alipayaccount,user_id) {
+        $("#user_no").val(user_no);
+        $("#name").val(name);
+        $("#phone").val(phone);
+        $("#wxaccount").val(wxaccount);
+        $("#alipayaccount").val(alipayaccount);
+        $("#user_id").val(user_id);
+        //$("#model_edit").css("display","block");
+    }
+    
+    function save() {
+        var user_no = $("#user_no").val();
+        var name = $("#name").val();
+        var phone = $("#phone").val();
+        var wxaccount = $("#wxaccount").val();
+        var alipayaccount = $("#alipayaccount").val();
+        var password = $("#password").val();
+        var user_id = $("#user_id").val();
+
+        if(name==""){
+            layer.msg("姓名不能为空");
+            return;
+        }
+        if(phone==""){
+            layer.msg("手机号不能为空");
+            return;
+        }
+
+        var mobile_reg=/^1[34578]\d{9}$/;
+
+        if(!mobile_reg.test(phone)){
+            layer.msg("手机号格式错误");
+            return;
+        }
+
+        if(user_no==""){
+            layer.msg("账号不能为空");
+            return;
+        }
+
+
+        $.ajax({
+            url: '/admin.php/Agent/editOp',
+            type: 'post',
+            data: {
+                user_no:user_no,
+                name:name,
+                phone:phone,
+                wxaccount:wxaccount,
+                alipayaccount:alipayaccount,
+                password:password,
+                user_id:user_id
+            },
+            success: function (result) {
+                if (result.status == 1) {
+                    layer.msg(result.msg);
+                    location.reload();
+                } else {
+                    layer.msg(result.msg);
+                }
+            }
+        });
+    }
+</script>
+    <style>
+        .am-u-sm-4{
+            padding-top: 20px;
+        }
+    </style>
+</block>

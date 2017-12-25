@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>常用收货地址</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/global.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/address.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order-detail.css">
+    <script src="__PUBLIC__/Home/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            console.log("2");
+            if("2" == "1" ){
+                $(".address-selectable").click(function(){
+                    $(this).addClass("address-selected");
+                    var id =$(this).attr("data-addr-id");
+                    location.href="/a/mobile/order/confirm?addressId="+id+"&dish=&couponUserId=&orderNo=";
+                });
+            }else{
+                $("#j-address-add").show();
+                $(".contect-button").show();
+            }
+        });
+
+        function del(id){
+            $.ajax({
+                async: false,
+                type: "POST",
+                url:"{:U('user/delAddress')}",
+                data:{
+                    address_id:id
+                },
+                success: function(data) {
+                    if (data.status == 1) {
+                        alert('删除成功');
+                        location.href = "/index.php/User/addressList";
+
+
+                    };
+                    if(data.status == 0){
+                        alert('删除失败');
+                    }
+                }
+            });
+        }
+
+    </script>
+    <style>
+        .newaddress{
+            float:right;
+            margin-right: 5px;
+            height: 42px;
+            line-height: 42px;
+        }
+    </style>
+</head>
+<body>
+<header id="header" class="header page-header  ">
+    <a class="j-back-link back-wrap" href="/index.php/User/index" >
+        <i class="icon i-back"></i><span class="goback">返回</span>
+    </a>
+    <div class="header-right"></div>
+    <span class="j-page-name page-name">收货地址</span>
+    <a class="edit j-edit newaddress" href="{:U('User/addAddress')}">新增</a>
+</header>
+
+<ul id="address-list" class="address-list" style="display: block;">
+    <?php foreach($list as $k=>$v): ?>
+        <li class="address-selectable">
+            <div class="address-info j-address-info">
+                <p class="customer-info"><span class="contect-name">姓名：{$v.name}</span><span class="contect-phone">电话：{$v.phone}</span></p>
+                <p class="address-dtl"><span class="contect-address">地址：{$v.province_name}{$v.city_name}{$v.county_name} {$v.address}</span></p>
+            </div>
+            <div class="contect-button" style="display: none;">
+                <a class="dele j-dele" href="#" onclick="del('{$v.address_id}')">删除</a>
+                <a class="edit j-edit" href="javascript:location.href='/index.php/User/editAddress?address_id={$v.address_id}';">编辑</a>
+            </div>
+        </li>
+    <?php endforeach; ?>
+</ul>
+<!-- 代码部分end -->
+</body>
+</html>

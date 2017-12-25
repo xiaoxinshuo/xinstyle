@@ -1,0 +1,60 @@
+<extend name="Public:index" />
+<block name="main">
+<div class="data">
+    <div class="title">
+        <h1>下单列表</h1>
+        <p>Your Order List</p>
+    </div>
+    <div class="placeorder">
+        <div class="section">
+            <select id="pay_status" onchange= "searchStatus()">
+                <option value="0" selected="selected">订单状态</option>
+                <option value="2">已付款</option>
+                <option value="1">未付款</option>
+            </select>
+        </div>
+        <div class="search-group">
+            <input type="text" id="order_id" placeholder="请输入订单号查询">
+            <button onclick="searchId()">搜索</button>
+        </div>
+        <div class="clear"></div>
+        <div class="right_table">
+
+        </div>
+    </div>
+</div>
+<script src="__PUBLIC__/Admin/js/jquery-3.2.1.min.js"></script>
+<script>
+    void function () {
+        var url='/admin.php/Order/search/p/{$pas}';
+        getAjaxData(url);
+    }();
+
+    function getAjaxData(url) {
+        $.ajax({
+            url:url,
+            type:'get',
+            data:
+                {
+                    order_id:$('#order_id').val(),
+                    pay_status:$('#pay_status').val(),
+                },
+            success:function (result){
+                $('.right_table').html(result);
+            }
+        });
+    }
+
+    function searchStatus(){
+        var pay_status = $('#pay_status').val();
+        var url='/admin.php/Order/search/p/1';
+        getAjaxData(url);
+    }
+
+    function searchId() {
+        var order_id = $('#order_id').val();
+        var url='/admin.php/Order/search/p/1';
+        getAjaxData(url);
+    }
+</script>
+</block>

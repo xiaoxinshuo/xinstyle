@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>登录后台</title>
+  <meta name="description" content="这是一个 index 页面">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="__PUBLIC__/Admin/assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/Admin/assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/amazeui.min.css" />
+  <link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/admin.css">
+  <link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/app.css">
+	<style>
+		.myapp-login-logo-text {
+			padding-top: 20%;
+		}
+	</style>
+</head>
+
+<body data-type="login">
+
+  <div class="am-g myapp-login">
+	<div class="myapp-login-logo-block  tpl-login-max">
+		<div class="myapp-login-logo-text">
+			<div class="myapp-login-logo-text">
+				<span> 盈科管理系统</span>
+				
+			</div>
+		</div>
+
+		<div class="am-u-sm-10 login-am-center">
+			<form class="am-form">
+				<fieldset>
+					<div class="am-form-group">
+						<input type="text" class="" id="userno" placeholder="请输入账号">
+					</div>
+					<div class="am-form-group">
+						<input type="password" class="" id="password" placeholder="请输入账号密码">
+					</div>
+					<p><button type="button" class="am-btn am-btn-default" id="go">登录</button></p>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+
+  <script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+  <script src="__PUBLIC__/Admin/assets/js/amazeui.min.js"></script>
+  <script src="__PUBLIC__/Admin/assets/js/app.js"></script>
+  <script type="text/javascript" >
+      $(function(){
+
+          $("#go").on("click",function(){
+              var userno = $("#userno").val();
+              var password = $("#password").val();
+              if(!userno){
+                  alert("请输入您的账号");
+                  return false;
+              }
+              if(!password){
+                  alert("请输入您的密码");
+                  return false;
+              }
+
+              $.ajax({
+                  type:"POST",
+                  url:"{:U('index/loginOp')}",
+                  data:{
+                      userno:userno,
+                      password:password
+                  },
+                  async: false,
+                  success:function(data){
+
+                      if(data.status == 0){
+                          alert(data.msg);
+                      }else if(data.status == 1){
+                          location.href= '/admin.php/Index/index';
+                      }
+                  }
+              });
+          });
+      });
+  </script>
+</body>
+
+</html>

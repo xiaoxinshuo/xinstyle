@@ -1,0 +1,68 @@
+<extend name="Public:index" />
+<block name="main">
+<div class="row">
+    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+        <div class="dashboard-stat blue">
+            <div class="visual">
+                <i class="am-icon-comments-o"></i>
+            </div>
+            <div class="details">
+                <div class="number"> {$totalUserCount} </div>
+                <div class="desc">代理总人数</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+        <div class="dashboard-stat red">
+            <div class="visual">
+                <i class="am-icon-bar-chart-o"></i>
+            </div>
+            <div class="details">
+                <div class="number"> {$monthUserCount} </div>
+                <div class="desc"> 本月新增代理</div>
+            </div>
+        </div>
+    </div>
+    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+        <div class="dashboard-stat green">
+            <div class="visual">
+                <i class="am-icon-apple"></i>
+            </div>
+            <div class="details">
+                <div class="number"> {$weekUserCount} </div>
+                <div class="desc"> 本周新增代理 </div>
+            </div>
+        </div>
+    </div>
+    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+        <div class="dashboard-stat purple">
+            <div class="visual">
+                <i class="am-icon-android"></i>
+            </div>
+            <div class="details">
+                <div class="number"> {$monthMoney} </div>
+                <div class="desc"> 本月订单金额 </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="am-u-lg-3 am-u-md-6 am-u-sm-12" style="float: left;">
+        <div class="dashboard-stat green">
+            <div class="visual">
+                <i class="am-icon-android"></i>
+            </div>
+            <div class="details">
+                <div class="number"> {$weekMoney} </div>
+                <div class="desc"> 本周订单金额 </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+</block>

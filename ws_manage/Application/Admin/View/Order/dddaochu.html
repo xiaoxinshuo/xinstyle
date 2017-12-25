@@ -1,0 +1,56 @@
+<extend name="Public:index" />
+<block name="main">
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">订单导出</li>
+</ol>
+
+<div class="tpl-portlet-components">
+    <div class="tpl-block">
+        <div class="am-g">
+            <form class="am-form-inline" data-am-validator>
+                <div class="am-form-group">
+                    <label class="am-radio-inline">
+                        <input type="radio" value="0" checked="checked" name="docInlineRadio"> 全部
+                    </label>
+                    <label class="am-radio-inline">
+                        <input type="radio" value="2" name="docInlineRadio"> 待发货
+                    </label>
+                    <label class="am-radio-inline">
+                        <input type="radio" value="3" name="docInlineRadio"> 已完成
+                    </label>
+                </div>
+                <input style="border: 1px solid #c2cad8;" type="text" id="startTime" class="am-form-field"  data-am-datepicker  required />
+                <span>到</span>
+                <input style="border: 1px solid #c2cad8;"  type="text" id="endTime" class="am-form-field"  data-am-datepicker  required />
+                <button type="button" class="am-btn am-btn-sm am-btn-warning export">导出excel</button>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+<div class="tpl-alert"></div>
+
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+<script>
+    $(".export").bind("click",function(){
+        var from = $('#startTime').val();
+        var to = $('#endTime').val();
+        var pay_status = $('input:radio[name="docInlineRadio"]:checked').val();
+
+        var cha='';
+        if(from!=''){
+            cha+='/from/'+from;
+        }
+        if(to!=''){
+            cha+='/to/'+to;
+        }
+        cha+='/pay_status/'+pay_status;
+
+        location.href="/admin.php/Order/export"+cha;
+    });
+</script>
+</block>

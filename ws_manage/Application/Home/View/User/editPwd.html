@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/global.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order-detail.css">
+    <style type="text/css">
+        .order-entry-name{width: 30%}
+        .order-entry-price{width: 70%}
+        .order-entry-price input,.order-entry-price select{
+            border:none;height: 34px;width: 100%;
+        }
+    </style>
+    <script src="__PUBLIC__/Home/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        var sub = true;
+        function submit(){
+            var loginName=$("#oldPassword").val();
+            if(loginName==""){
+                alert("原密码不能为空");
+                return;
+            }
+            var password=$("#password").val();
+            if(password==""){
+                alert("密码不能为空");
+                return;
+            }
+            if(password.length <=5){
+                alert("密码必须不小于6位");
+                return;
+            }
+
+            var verifyPassword=$("#verifyPassword").val();
+            if(verifyPassword==""){
+                alert("确认密码不能为空");
+                return;
+            }
+            if(verifyPassword != password){
+                alert("确认密码必须和密码相同");
+                return;
+            }
+
+            if(!sub){
+                return;
+            }
+            sub = false;
+            $.ajax({
+                type: "post",
+                url: "{:U('user/editPwdOp')}",
+                async: false,
+                data: {
+                    password:loginName,
+                    new_password:password
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == 1){
+                        alert(data.msg);
+                        location.href = "/index.php/User/index";
+                    }else{
+                        $("body").mLoading("hide");
+                        sub = true;
+                        alert(data.msg);
+                    }
+
+
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<header id="header" class="header page-header">
+    <a class="j-back-link back-wrap" href="javascript:history.back(-1)" >
+        <i class="icon i-back"></i><span class="goback">返回</span>
+    </a>
+    <h1 class="j-page-name page-name">修改密码</h1>
+</header>
+<!-- 代码部分begin -->
+<form action="/a/mobile/mine/update/pwd" id="pwd_form" method="post">
+    <div id="address-wrap" class="order-region">
+        <ul class="order-region-entries" id="food-items">
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*原密码</span>
+                <span class="order-entry-price">
+			    	<input type="password" placeholder="请填写原密码" id="oldPassword" name="oldPassword" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*密码</span>
+                <span class="order-entry-price">
+			    	<input type="password" placeholder="请填写密码" id="password" name="password" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*确认密码</span>
+                <span class="order-entry-price">
+			    	<input type="password" placeholder="请填写确认密码" id="verifyPassword" name="verifyPassword" value="">
+			    </span>
+            </li>
+        </ul>
+    </div>
+</form>
+<div class="order-btn-field">
+    <input id="order-submit" class="combtn order-btn" type="button" value="保存" onclick="submit();">
+</div>
+<!-- 代码部分end -->
+</body>
+</html>

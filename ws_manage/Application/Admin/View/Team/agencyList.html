@@ -1,0 +1,102 @@
+<extend name="Public:index" />
+<block name="main">
+<div class="data">
+    <div class="title">
+        <h1>代理列表</h1>
+        <p>Home Agents List</p>
+    </div>
+    <?php if($user_id): ?>
+    <div style="position:relative;">
+    <button type="button" onclick="reback()" style="float: left;margin-left:5%;margin-bottom:10px;color: white;background-color: #2f4f4f;border: 0;border-radius: 5px;padding: 5px 10px 5px 10px;">返回</button>
+    </div>
+    <div style="clear: both"></div>
+    <?php endif; ?>
+    <div class="agency">
+        <table>
+            <thead>
+            <tr>
+                <td>
+                    <div class="CheckboxFive">
+                        <input type="checkbox" value="1" id="checkboxOneInput1" name="">
+                        <label for="checkboxOneInput1"></label>
+                    </div>
+                </td>
+                <td>姓名</td>
+                <td>电话</td>
+                <td>上级代理</td>
+                <td>下级代理</td>
+                <td>编辑</td>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($agentList as $k=>$v): ?>
+            <tr>
+                <td>
+                    <div class="CheckboxFive">
+                        <input type="checkbox" value="1" id="checkboxOneInput2" name="">
+                        <label for="checkboxOneInput2"></label>
+                    </div>
+                </td>
+                <td>{$v.name}</td>
+                <td>{$v.phone}</td>
+                <td>
+                    <?php if($v['r_name']):?>
+                    {$v.r_name}
+                    <?php else: ?>
+                    全国总代
+                    <?php endif; ?>
+                </td>
+                <td><a href="/admin.php/Team/agencyList/uid/{$v.user_id}">点击查看</a></td>
+                <td>
+                    <a class="red" id="{$v.user_id}"><i><img src="__PUBLIC__/Admin/img/dongjie.png"></i>冻结</a>
+                    <a class="green" id="{$v.user_id}"><i><img src="__PUBLIC__/Admin/img/jiechu.png"></i>解除</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="fenye">
+        {$page}
+    </div>
+</div>
+<script src="__PUBLIC__/Admin/js/jquery-3.2.1.min.js"></script>
+<script>
+    function reback() {
+        history.go(-1);
+    }
+    $(".red").bind('click',function () {
+        var user_id = $(this).attr('id');
+        $.ajax({
+            url:'/admin.php/Team/freezeAgent',
+            type:'post',
+            data:
+                {
+                    user_id:user_id
+                },
+            success:function (result){
+                if(result.status == 1){
+                    alert(result.msg);
+                }
+            }
+        });
+    });
+
+    $(".green").bind('click',function () {
+        var user_id = $(this).attr('id');
+        $.ajax({
+            url:'/admin.php/Team/unfreezeAgent',
+            type:'post',
+            data:
+                {
+                    user_id:user_id
+                },
+            success:function (result){
+                if(result.status == 1){
+                    alert(result.msg);
+                }
+            }
+        });
+    });
+</script>
+</block>

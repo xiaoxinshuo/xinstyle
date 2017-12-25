@@ -1,0 +1,34 @@
+<table class="am-table am-table-striped am-table-hover table-main">
+    <thead>
+    <tr>
+        <th class="table-title">姓名</th>
+        <th class="table-title">团队业绩</th>
+        <th class="table-title">个人业绩</th>
+        <th class="table-title">团队奖金</th>
+        <th class="table-title">个人奖金</th>
+        <th class="table-title">当月佣金</th>
+        <th class="table-title">微信</th>
+        <th class="table-title">支付宝账号</th>
+        <th class="table-title">结算日期</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($userlist as $v): ?>
+    <tr>
+        <td>{$v.name}</td>
+        <td>{$v.teamMonthSale}</td>
+        <td>{$v.selfMonthSales}</td>
+        <td>{$v.teamMonthAward}</td>
+        <td>{$v.selfAward}</td>
+        <td>{$v.allAward}</td>
+        <td>{$v.wxaccount}</td>
+        <td>{$v.alipayaccount}</td>
+        <td>{$v.jiesuanDate}</td>
+    </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<div class="am-cf">
+    {$page}
+</div>
+<hr>

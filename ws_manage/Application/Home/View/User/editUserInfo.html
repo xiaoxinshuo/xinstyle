@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>修改用户信息</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/global.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order-detail.css">
+    <style type="text/css">
+        .order-entry-name{width: 30%}
+        .order-entry-price{width: 70%}
+        .order-entry-price input,.order-entry-price select{
+            border:none;height: 34px;width: 100%;
+        }
+    </style>
+    <script src="__PUBLIC__/Home/js/jquery.min.js"></script>
+</head>
+<body>
+<header id="header" class="header page-header">
+    <a class="j-back-link back-wrap" href="javascript:history.back(-1)" >
+        <i class="icon i-back"></i><span class="goback">返回</span>
+    </a>
+    <h1 class="j-page-name page-name">修改用户信息</h1>
+</header>
+<!-- 代码部分begin -->
+<form action="/a/mobile/mine/update/user" id="user_form" method="post">
+    <div id="address-wrap" class="order-region">
+        <ul class="order-region-entries" id="food-items">
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*姓名</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写真实姓名" id="name" name="name" value="{$userinfo.name}">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*开户银行</span>
+                <span class="order-entry-price">
+			    	<select id="bankName" name="bankName" >
+                        <?php foreach($banklist as $v): ?>
+                        <?php if($v['bank_no'] == $ubinfo['bank_no']): ?>
+						<option value="{$v.bank_no}" selected="selected">{$v.bank_name}</option>
+                        <?php else: ?>
+						<option value="{$v.bank_no}">{$v.bank_name}</option>
+                        <?php endif;endforeach; ?>
+					</select>
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*银行卡号</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写银行卡号" id="bankNum" name="bankNum" value="{$ubinfo.card_no}">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*真实姓名</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写银行卡卡户真实姓名" id="bankUserName" name="bankUserName" value="{$ubinfo.user_name}">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*支付宝</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写与姓名相同的支付宝账号" id="alipayAccount" name="alipayAccount" value="{$userinfo.alipayaccount}">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*微信号</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写真实微信号" id="wxAccount" name="wxAccount" value="{$userinfo.wxaccount}">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">邮箱</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写邮箱" id="email" name="email" value="{$userinfo.email}">
+			    </span>
+            </li>
+            <input type="hidden" id="rel_id" value="{$ubinfo.rel_id}">
+        </ul>
+    </div>
+</form>
+<div class="order-btn-field">
+    <input id="order-submit" class="combtn order-btn" type="button" value="保存" onclick="submit();">
+</div>
+<!-- 代码部分end -->
+<script type="text/javascript">
+var sub = true;
+function submit(){
+
+    var name=$("#name").val();
+    if(name==""){
+        alert("姓名不能为空");
+        return;
+    }
+
+    var bankName=$("#bankName").val();
+    if(bankName==""){
+        alert("开户银行不能为空");
+        return;
+    }
+
+    var bankNum=$("#bankNum").val();
+    if(bankNum==""){
+        alert("银行卡号不能为空");
+        return;
+    }
+
+    var bankUserName=$("#bankUserName").val();
+    if(bankUserName==""){
+        alert("银行卡卡户真实姓名不能为空");
+        return;
+    }
+
+    var alipayAccount=$("#alipayAccount").val();
+    if(alipayAccount==""){
+        alert("支付宝账号不能为空");
+        return;
+    }
+
+    var wxAccount=$("#wxAccount").val();
+    if(wxAccount==""){
+        alert("微信号不能为空");
+        return;
+    }
+
+    var email=$("#email").val();
+    if(email!=""){
+        var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        if(!myreg.test(email)){
+            alert('请输入有效的邮箱！');
+            return false;
+        }
+    }
+
+    if(!sub){
+        return;
+    }
+    sub = false;
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url:"/index.php/User/editUserInfoOp",
+        data:{
+            name:name,
+            bankName:bankName,
+            bankNum:bankNum,
+            bankUserName:bankUserName,
+            alipayAccount:alipayAccount,
+            wxAccount:wxAccount,
+            rel_id:$("#rel_id").val(),
+            email:email
+        },
+        error: function(request) {
+            sub = true;
+            alert("Connection error");
+            $("#order-submit").removeAttr("disabled");
+        },
+        success: function(data) {
+            sub = true;
+            if (data.status == 1) {
+                alert('添加成功');
+                $("#order-submit").removeAttr("disabled");
+                location.href = "/index.php/User/index";
+            };
+            if(data.status == 0){
+                alert(data.msg);
+                $("#order-submit").removeAttr("disabled");
+            }
+        }
+    });
+}
+
+</script>
+</body>
+</html>

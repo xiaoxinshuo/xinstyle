@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>微商管理后台</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="__PUBLIC__/Admin/assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/Admin/assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/app.css">
+    <script src="__PUBLIC__/Admin/assets/js/echarts.min.js"></script>
+</head>
+<body data-type="index">
+<header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+        <a href="javascript:;" class="tpl-logo">
+            <img src="__PUBLIC__/Admin/assets/img/logo.png" alt="">
+        </a>
+    </div>
+    <div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right">
+
+    </div>
+
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+    <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+        <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+
+            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                    <span class="tpl-header-list-user-nick"><?php echo $_SESSION['username']; ?></span>
+                </a>
+                <ul class="am-dropdown-content">
+                    <li><a href="{:U('Index/changepwd')}"><span class="am-icon-cog"></span> 设置</a></li>
+                    <li><a href="#" onclick="tuichu();"><span class="am-icon-power-off"></span> 退出</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
+
+
+
+
+
+
+
+<div class="tpl-page-container tpl-page-header-fixed">
+
+
+    <div class="tpl-left-nav tpl-left-nav-hover">
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <!--首页-->
+                <li class="tpl-left-nav-item">
+                    <a href="{:U('Index/index')}" class="nav-link   active">
+                        <i class="am-icon-home"></i>
+                        <span>首页</span>
+                    </a>
+                </li>
+                <!--基础设置-->
+                <!--广告管理-->
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-money"></i>
+                        <span>广告管理</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a href="{:U('Advert/index')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>广告列表</span>
+                            </a>
+
+                            <a href="{:U('Advert/add')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>广告添加</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!--代理审核-->
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-newspaper-o"></i>
+                        <span>代理审核</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a href="{:U('Agent/shenhe')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>审核列表</span>
+                            </a>
+
+                            <a href="{:U('Agent/daili')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>代理列表</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!--商城系统-->
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list ">
+                        <i class="am-icon-shopping-bag"></i>
+                        <span>商城系统</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a href="{:U('Goods/add')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>新增商品</span>
+                            </a>
+
+                            <a href="{:U('Goods/index')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>商品列表</span>
+                            </a>
+                            <a href="{:U('Goods/wuliu')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>物流管理</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!--订单系统-->
+                <li class="tpl-left-nav-item">
+                    <a href="Javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-reorder"></i>
+                        <span>订单系统</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a href="{:U('Order/daifahuo')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>待发货</span>
+                            </a>
+                            <a href="{:U('Order/yiwancheng')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>已完成</span>
+                            </a>
+                            <a href="{:U('Order/dddaochu')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>订单导出</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!--佣金系统-->
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-money"></i>
+                        <span>佣金系统</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a href="{:U('Commission/rules')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>佣金规则</span>
+                            </a>
+
+                            <a href="{:U('Commission/jiesuan')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>佣金结算</span>
+                            </a>
+                            <a href="{:U('Commission/yjdaochu')}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>佣金导出</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+    <div class="tpl-content-wrapper">
+        <block name="main"></block>
+    </div>
+
+</div>
+    <script src="__PUBLIC__/Admin/assets/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/Admin/assets/js/amazeui.min.js"></script>
+    <script src="__PUBLIC__/Admin/assets/js/iscroll.js"></script>
+    <script src="__PUBLIC__/Admin/assets/js/app.js"></script>
+    <script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+    <script>
+        function tuichu() {
+            $.ajax({
+                url: '/admin.php/Index/tuichu',
+                type: 'post',
+                data: {},
+                success: function (result) {
+                    if (result.status == 1) {
+                        location.href="/admin.php/Index/login";
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

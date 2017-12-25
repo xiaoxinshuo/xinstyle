@@ -1,0 +1,40 @@
+html, body, h1, h2, h3, h4, h5, h6, p, ul, ol, form, button, dl, dt, dd, input, textarea {margin: 0; -webkit-box-sizing:
+        border-box;  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); word-wrap: break-word; word-break: break-all;  padding: 0;  margin: 0;  }
+html {  height: 100%;font-family: "微软雅黑"  }
+ul, ol { padding-left: 0;list-style-type: none; display: block }
+a { text-decoration: none;outline: none;  }
+
+.footer2{display: block;text-align: center;color: #000;margin: 0%;position: fixed;bottom: 0px;left: 0;width: 100%;
+    border-top:1px solid #ccc;}
+.footer2 li{width: 33.3%;height: 60px;display: inline-block;line-height: 60px;float: left;font-size: 12px;background: rgba(253, 253, 253, 0.74);}
+.footer2 li i{width: 24px;height: 24px;background-size: 100%;display: block;margin: 0 auto;margin-top: 5px;}
+.footer2 i.home{background-image: url("../images/icon_home.png")}
+.footer2 i.order{background-image: url("../images/icon_order.png")}
+.footer2 i.mine{background-image: url("../images/icon_mine.png")}
+.footer2 .active  i.home{background-image: url("../images/icon_home_y.png")}
+.footer2 .active  i.order {background-image: url("../images/icon_order_y.png")}
+.footer2 .active  i.mine{background-image: url("../images/icon_mine_y.png")}
+.footer2 span{display: block;height: 30px;line-height: 30px;color: #8a8a8a;font-weight: bold}
+.footer2 .active span{color: #ff8000}
+
+@font-face {
+    font-family: icomoon;
+    src:
+            url(../fonts/icomoon.eot?#iefix)
+            format('embedded-opentype'),
+            url(../fonts/icomoon.woff)
+            format('woff'),
+            url(../fonts/icomoon.ttf)
+            format('truetype'),
+            url(../fonts/iscomoon.svg)
+            format('svg');
+    font-weight: 400;
+    font-style: normal
+}
+[class^=icon-], [class*=" icon-"] { font-family: icomoon; speak: none;font-style: normal;  font-weight: 400;font-variant: normal;text-transform: none;line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;  }
+.icon-minus:before {  content: "\e604"}
+.icon-plus:before {content: "\e611"}
+.icon-cart:before { content: "\e600";  }
+.icon-arrow-right-thin:before {
+    content: "\e618"
+}

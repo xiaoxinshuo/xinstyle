@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta id="viewport" name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>登录</title>
+	<link rel="stylesheet" href="__PUBLIC__/Home/css/login.css">
+	<script type="text/javascript" src="__PUBLIC__/Home/js/jquery.min.js"></script>
+	<script type="text/javascript">
+    	$(function(){
+    		var msg ="";
+    		if(msg != ""){
+    			alert(msg.split(".")[0]);
+    			if("".indexOf("审核未通过")>-1){
+    				location.href="/a/mobile/insert/user/view?id="+msg.split(".")[1];
+    				return;
+    			};
+    		}
+    		$("#go").on("click",function(){
+    			var username = $("#username").val();
+    			var password = $("#password").val();
+    			var validateCode = $("#validateCode").val();
+    			if(!username){
+    				alert("请输入您的账号");
+    				return false;
+    			}
+    			if(!password){
+    				alert("请输入您的密码");
+    				return false;
+    			}
+    			if('' == 'true'){
+    				if(!validateCode){
+        				alert("请输入验证码");
+        				return false;
+        			}
+    			}
+
+                $.ajax({
+                    type:"POST",
+                    url:"{:U('index/loginOp')}",
+                    data:{
+                        username:username,
+                        password:password
+                    },
+                    async: false,
+                    success:function(data){
+						if(data.status == 0){
+						    alert(data.msg);
+						}else if(data.status == 1){
+                            location.href= '/index.php/Index/index';
+						}
+                    }
+                });
+    		});
+    	});
+    	
+		function forget() {
+			alert("请联系菲掌柜客服13011919911");
+        }
+    </script>
+	<style>
+		.forget{
+			width: 290px;
+			height: 40px;
+			line-height: 40px;
+			background: #146fdf;
+			border: none;
+			border-radius: 25px;
+			color: #fff;
+			font-size: 16px;
+			margin-top: 15px;
+			display: block;
+			text-align: center;
+		}
+		.forget a{
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<div id="content" class="content">
+		<div id="login" class="login">
+			<!-- <div id="logo"><img src="../static/a/images/logo.png" style="width: 100%; margin: 20px 0 20px 0;"></img></div> -->
+			<form id="loginFrm" action="/a/login" method="post">
+				<div id="web_login" style="display: block;">
+					<ul id="g_list">
+						<input type="hidden" name="resr" value="">
+						<input type="hidden" name="resr11" value="">
+						<input type="hidden" name="mobileLogin" value="true">
+						<li id="g_u">
+							<input id="username"  name="username" value=""  class="inputstyle" autocomplete="off" placeholder="请输入您的账号">
+						</li>
+						<br>
+						<li id="g_p">
+							<input id="password"  name="password" value=""  class="inputstyle" maxlength="20" type="password" autocorrect="off" placeholder="请输入您的密码">
+						</li>
+						
+					</ul>
+					
+
+					<button type="button" id="go" >登录</button>
+					<a  onclick="forget()" class="forget">忘记密码</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

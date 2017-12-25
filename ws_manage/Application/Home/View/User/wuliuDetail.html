@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>物流查看</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/global.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/address.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/order-detail.css">
+    <script src="__PUBLIC__/Home/js/jquery.min.js"></script>
+    <style type="text/css">
+        .customer-info span{display: inline-block;float: left;margin-right:0px;}
+        .contect-button a{border:none;width: 100%;text-align: right;font-size: 14px;color: #f84646}
+        .address-info p{
+            white-space: pre-line;
+        }
+    </style>
+
+</head>
+<body>
+<div id="section_container">
+    <section id="index_section" class="active">
+        <header id="header" class="header page-header">
+            <a class="j-back-link back-wrap" href="javascript:history.back(-1)">
+                <i class="icon i-back" style="width: 12px;height: 20px; background-position: 0 -107px;background-image: url(__PUBLIC__/Home/images/icon.png); background-size: 150px 350px; display: inline-block;"></i>
+                <span class="goback">返回</span>
+            </a>
+            <div class="header-right"></div>
+            <h1 class="j-page-name page-name" style="width:50%; margin: 0 25%;">物流信息</h1>
+        </header>
+
+
+        <article class="active"id="scrollWrapper" data-scroll="true" style="background: #eeeeee">
+            <div class="list" >
+                <ul id="address-list" class="address-list" style="display: block;">
+                    <?php foreach($list as $k=>$v): ?>
+                    <li class="">
+                        <div class="address-info j-address-info">
+                            <p class="customer-info"><span class="contect-name">{$v.time}</span><br><span class="contect-phone">{$v.context}</span></p>
+                        </div>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </article>
+    </section>
+</div>
+</body>
+</html>

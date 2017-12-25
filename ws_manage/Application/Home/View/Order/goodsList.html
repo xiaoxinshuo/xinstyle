@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>商品列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui"/>
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<link rel="stylesheet" href="__PUBLIC__/Home/css/global.css">
+<link rel="stylesheet" href="__PUBLIC__/Home/css/goods.css">
+<link rel="stylesheet" href="__PUBLIC__/Home/css/img.css">
+<link rel="stylesheet" href="__PUBLIC__/Home/css/jquery.mloading.css">
+<link rel="stylesheet" href="__PUBLIC__/Home/css/layer.css">
+<style type="text/css">
+    a.disabled {
+        pointer-events: none;
+        filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+        -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+        opacity: 0.5; /*其他，透明度50%*/
+    }
+</style>
+<!--<script src="__PUBLIC__/Home/js/jquery.min2.js"></script>-->
+<script src="__PUBLIC__/Home/js/jquery-3.2.1.js"></script>
+<script src="__PUBLIC__/Home/js/fly.js"></script>
+<script src="__PUBLIC__/Home/js/jquery.mloading.js"></script>
+<script src="__PUBLIC__/Home/js/layer.js"></script>
+<script>
+$(function () {
+    $(".-plus").click(function (t) {
+
+        var stock = Number($(this).attr("data-stock"));
+        var id = $(this).parent().attr("data");
+        var obj = $(".list-group").find("#cl_item_" + id);
+        var title = $("#item_" + id).find(".title").text();
+        var price = $("#item_" + id).find(".price").text().replace("¥", "");
+        var num = Number($("#item_" + id).find(".item-count").text());
+        var orderFlag = $("#item_" + id).attr("data-order-flag");
+
+
+        if (num + 1 > stock) {
+            return false;
+        }
+        var count = Number($(".cart-count").text());
+        if (count == 0) {
+            firstOrderFlag = $("#item_" + id).attr("data-order-flag");
+        }
+        if (orderFlag != firstOrderFlag) {
+            alert('对不起，该商品无法与您选择的商品同时下单，需要单独下单！');
+            return false;
+        }
+        var e = $(t.currentTarget).parent();
+        e.addClass("show-all");
+        $("#item_" + id).find(".item-count").text(num + 1);
+        $(".cart-count").text(count + 1);
+        $(".cart-count").css("visibility", "visible");
+
+        totalPrice();
+    });
+
+    $(".-minus").click(function () {
+        var id = $(this).parent().attr("data");
+        var num = parseInt($("#item_" + id).find(".item-count").text());
+        $("#item_" + id).find(".item-count").text(num - 1);
+        $("#cl_item_" + id).find(".item-count").text(num - 1);
+        var price = $("#item_" + id).find(".price").text().replace("¥", "");
+        var total_price = Number(price) * (num - 1);
+        $("#cl_item_" + id).find(".cl-r3").text(total_price);
+        var count = Number($(".cart-count").text());
+        $(".cart-count").text(count - 1);
+        if (num - 1 == 0) {
+            //$(".cart-count").css("visibility","hidden");
+            $("#item_" + id).find(".item-add").removeClass("show-all");
+            $("#cl_item_" + id).remove();
+            $(".global-mask").hide();
+            $(".list-group").remove("#cl_item_" + id);
+        }
+        totalPrice();
+    });
+
+    $(".row-status").click(function () {
+        if (!$(".row-status").hasClass("local-disable")) {
+            $(".row-status").addClass("disabled");
+            //$("body").mLoading();
+            var dish = "";
+            $(".show-all").each(function () {
+                var id = $(this).attr("data");
+                var num = Number($(this).find(".item-count").text());
+                dish += id + "-" + num + ',';
+            });
+
+            $.ajax({
+                async: false,
+                type: "POST",
+                url:"{:U('Order/addPreOrder')}",
+                data:{
+                    dish:dish
+                },
+                success: function(data) {
+                    //var data=eval("("+data+")");
+                    if (data.status == 1) {
+                        location.href = "newOrder";
+
+                    };
+                    if(data.status == 0){
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    });
+
+    var page = 1;
+    var stop=true;
+    $(window).scroll(function(){
+        totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+        if($(document).height() <= totalheight){
+            if(stop==true){
+                stop=false;
+                //下滑到底后要执行的代码
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url:"{:U('Order/ajaxGoodsList')}",
+                    data:{
+                        page:page
+                    },
+                    success: function(data) {
+                        //var data=eval("("+data+")");
+                        if (page > 1){
+                            if (data.status == 1) {
+                                page ++;
+                                var arr = data.list;
+                                for(var i=0;i<arr.length;i++){
+                                    var html='';
+                                    html += '<li id="item_'+arr[i]['good_id']+'" class="list-item item-img" data-order-flag="0">';
+                                    html += '<div class="wrap"><div class="list-img">';
+                                    html += '<a class="example" href="'+arr[i]['image_url']+'">';
+                                    html += '<img alt="" src="'+arr[i]['image_url']+'" style="width: 100%;height: 100%;"></a></div>';
+                                    html += '<div class="list-content"><h4 class="title">'+arr[i]['good_name']+'</h4>';
+                                    html += '<p class="price">¥ '+arr[i]['price']+'<span style="color: #666;font-size: 7px; font-weight: 100;">/'+arr[i]['weight']+'g </div></div>';
+                                    html += '<div class="item-add" data="'+arr[i]['good_id']+'">';
+                                    html += '<span class="btn  -minus" id="minus-'+arr[i]['good_id']+'"> <i class="icon-minus"></i></span>';
+                                    html += '<span class="item-count">0</span>';
+                                    html += '<span class="btn -plus" id="plus-'+arr[i]['good_id']+'" data-stock="3373"> <i class="icon-plus"></i></span></div></li>';
+                                    $('#content').append(html);
+                                    preSelect(arr[i]['good_id']);
+                                }
+
+                                stop=true;
+
+                            }
+                            if(data.status == 0){
+                                layer.msg('没有更多商品了');
+                                stop=true;
+                            }
+                        }else{
+                            page ++;
+                            stop=true;
+                        }
+
+                    }
+                });
+
+            }
+        }
+    });
+});
+
+function preSelect(oid) {
+    $("#plus-"+oid).click(function (t) {
+
+        var stock = Number($(this).attr("data-stock"));
+        var id = $(this).parent().attr("data");
+        var obj = $(".list-group").find("#cl_item_" + id);
+        var title = $("#item_" + id).find(".title").text();
+        var price = $("#item_" + id).find(".price").text().replace("¥", "");
+        var num = Number($("#item_" + id).find(".item-count").text());
+        var orderFlag = $("#item_" + id).attr("data-order-flag");
+
+
+        if (num + 1 > stock) {
+            return false;
+        }
+        var count = Number($(".cart-count").text());
+        if (count == 0) {
+            firstOrderFlag = $("#item_" + id).attr("data-order-flag");
+        }
+        if (orderFlag != firstOrderFlag) {
+            alert('对不起，该商品无法与您选择的商品同时下单，需要单独下单！');
+            return false;
+        }
+        var e = $(t.currentTarget).parent();
+        e.addClass("show-all");
+        $("#item_" + id).find(".item-count").text(num + 1);
+        $(".cart-count").text(count + 1);
+        $(".cart-count").css("visibility", "visible");
+
+        totalPrice();
+    });
+
+    $("#minus-"+oid).click(function () {
+        var id = $(this).parent().attr("data");
+        var num = parseInt($("#item_" + id).find(".item-count").text());
+        $("#item_" + id).find(".item-count").text(num - 1);
+        $("#cl_item_" + id).find(".item-count").text(num - 1);
+        var price = $("#item_" + id).find(".price").text().replace("¥", "");
+        var total_price = Number(price) * (num - 1);
+        $("#cl_item_" + id).find(".cl-r3").text(total_price);
+        var count = Number($(".cart-count").text());
+        $(".cart-count").text(count - 1);
+        if (num - 1 == 0) {
+            //$(".cart-count").css("visibility","hidden");
+            $("#item_" + id).find(".item-add").removeClass("show-all");
+            $("#cl_item_" + id).remove();
+            $(".global-mask").hide();
+            $(".list-group").remove("#cl_item_" + id);
+        }
+        totalPrice();
+    });
+
+
+}
+
+function totalPrice() {
+    var total_price = 0;
+    $(".show-all").parent().each(function () {
+        var price = $(this).find(".price").text().replace("¥", "");
+        var num = Number($(this).find(".item-count").text());
+//                console.log(price);
+        total_price += parseFloat(price) * num;
+    });
+    $(".row-num").addClass("shopCartAnimate");
+//             $(".row-num").on("webkitAnimationEnd",  function() {  $(".row-num").removeClass("shopCartAnimate") });
+    $(".cart-price").text("共  ¥" + total_price.toFixed(2) + " 元 ");
+    if (total_price > 0) {
+        $(".row-status").removeClass("local-disable");
+        $(".row-status").text("选好了");
+    } else {
+        $(".row-status").addClass("local-disable");
+        $(".row-status").text("请选择");
+    }
+}
+</script>
+</head>
+<body>
+<!-- 代码部分begin -->
+<div id="pager">
+    <div class="shopmenu-list">
+        <ul id="content" class="listgroup" data-id="2">
+            <?php foreach($list as $v): ?>
+            <li id="item_{$v.good_id}" class="list-item item-img" data-order-flag="0">
+                <div class="wrap">
+                    <div class="list-img">
+                        <a class="example" href="{$v.image_url}">
+                            <img alt="" src="{$v.image_url}" style="width: 100%;height: 100%;">
+                        </a>
+                    </div>
+                    <div class="list-content">
+                        <h4 class="title">{$v.good_name}</h4>
+                        <p class="price">¥ {$v.price}<span style="color: #666;font-size: 7px; font-weight: 100;">/{$v.good_format}g
+                    </div>
+                </div>
+
+                <div class="item-add" data="{$v.good_id}">
+                    <span class="btn  -minus" id="minus-{$v.good_id}"> <i class="icon-minus"> </i></span>
+                    <span class="item-count">0</span>
+                    <span class="btn -plus" id="plus-{$v.good_id}" data-stock="3373"> <i class="icon-plus"></i></span>
+                </div>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <div id="shopmenu-cart-bar" class="shopmenu-cart-bar">
+        <div class="row-num">
+            <i class="icon-cart"></i><em class="cart-count">0</em>
+        </div>
+        <div class="row-cart">
+            <div class="price-info">
+                <div class="cart-price">共 0.00 元</div>
+                <div class="cart-premium" style="display: none;"></div>
+            </div>
+        </div>
+        <a class="row-status  local-disable" data-node="cartStatus" data-dishc="0">请选择</a>
+    </div>
+    <ul class="footer2">
+        <li onclick="javascript:location.href='/index.php/Index/index'"><i class="home"></i><span>首页</span></li>
+        <li class="active" onclick="javascript:location.href='#'"><i class="order"></i><span>下单</span></li>
+        <li class="" onclick="javascript:location.href='/index.php/User/index'"><i class="mine"></i><span>我的</span></li>
+    </ul>
+</div>
+<!-- 代码部分end -->
+<script src="__PUBLIC__/Home/js/jquery.imgbox.pack.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".example").imgbox({
+            'speedIn': 0,
+            'speedOut': 0,
+            'alignment': 'center',
+            'overlayShow': true,
+            'allowMultiple': false
+        });
+    })
+</script>
+</body>
+</html>

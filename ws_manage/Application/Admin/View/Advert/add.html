@@ -1,0 +1,108 @@
+<extend name="Public:index" />
+<block name="main">
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">广告管理</li>
+</ol>
+<div class="tpl-portlet-components">
+    <div class="tpl-block ">
+        <div class="am-g tpl-amazeui-form">
+
+            <div class="am-u-sm-12 am-u-md-9">
+                <form class="am-form am-form-horizontal">
+                    <div class="am-form-group">
+                        <label for="name" class="am-u-sm-3 am-form-label">广告名称</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="name" placeholder="输入广告名称">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="address" class="am-u-sm-3 am-form-label">广告地址</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="address" placeholder="输入广告地址">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">商品图片</label>
+                        <div class="am-u-sm-9">
+                            <div class="am-form-group am-form-file">
+                                <button type="button" class="am-btn am-btn-default am-btn-sm">
+                                    <i class="am-icon-cloud-upload"></i> 选择要上传的图片</button>
+                                （建议比例等比980 X 400）
+                                <input type="file" id="file">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="button" class="am-btn am-btn-primary" onclick="save()" >添加新广告</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+<script>
+    function save() {
+        //获取参数
+        var name = $("#name").val();
+        var address = $("#address").val();
+        if ($.trim(name).length==0){
+            layer.msg('广告名称不能为空');
+            return;
+        }
+        if ($.trim(address).length==0){
+            layer.msg('广告地址不能为空');
+            return;
+        }
+
+        //实例化一个formData对象
+        var formData = new FormData();
+        //获取点击的文本框类型为file
+        var file = document.getElementById("file");
+
+        //获取的图片文件
+        var fileList = file.files;
+        //图片数量最大为5张
+        if(fileList.length < 1){
+            layer.msg('图片不能为空');
+            return;
+        }
+        //将file.files数组中的值追加到formdata对象中
+        for (i = 0; i < fileList.length; i++) {
+            formData.append('file[]', fileList[i]);
+        }
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url:"/admin.php/Advert/addOp/name/"+name+"/address/"+address,
+            processData: false,
+            contentType: false,
+            data:formData,
+            error: function(request) {
+                layer.msg("Connection error");
+            },
+            success: function(data) {
+                if (data.status == 1) {
+                    layer.msg('添加成功');
+                    location.href="/admin.php/Advert/index";
+                };
+                if(data.status == 0){
+                    layer.msg('添加失败');
+                }
+            }
+        });
+    }
+
+</script>
+
+</block>

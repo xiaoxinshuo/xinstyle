@@ -1,0 +1,88 @@
+<extend name="Public:index" />
+<block name="main">
+
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">修改密码</li>
+</ol>
+<div class="tpl-portlet-components">
+    <div class="tpl-block ">
+
+        <div class="am-g tpl-amazeui-form">
+
+
+            <div class="am-u-sm-12 am-u-md-9">
+                <form class="am-form am-form-horizontal">
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">用户名</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" disabled  value="<?php echo $_SESSION['username']?>">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">请输入新用户名</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="name" placeholder="请输入新用户名">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">密码</label>
+                        <div class="am-u-sm-9">
+                            <input type="password" disabled placeholder="*******">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">请输入新密码</label>
+                        <div class="am-u-sm-9">
+                            <input type="password" id="password" placeholder="请输入新密码">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="button" class="am-btn am-btn-primary am-round" onclick="save()">确认修改</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+<script>
+    function save() {
+        var name = $("#name").val();
+        var pwd = $("#password").val();
+        if (name == ''){
+            layer.msg('用户名不能为空');
+            return false;
+        }
+
+        if (name == ''){
+            layer.msg('密码不能为空');
+            return false;
+        }
+        $.ajax({
+            url: '/admin.php/Index/changePwdOp',
+            type: 'post',
+            data: {
+                name:name,
+                pwd:pwd
+            },
+            success: function (result) {
+                if (result.status == 1) {
+                    layer.msg(result.msg)
+                    location.href="/admin.php/Index/index";
+                }else{
+                    layer.msg(result.msg)
+                }
+            }
+        });
+    }
+</script>
+
+</block>

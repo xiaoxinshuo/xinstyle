@@ -1,0 +1,77 @@
+<?php switch ($div):case 'agent':?>
+<table class="am-table am-table-striped am-table-hover table-main">
+    <thead>
+    <tr>
+        <th class="table-id">ID</th>
+        <th class="table-title">账号</th>
+        <th class="table-type">姓名</th>
+        <th class="table-author am-hide-sm-only">上级代理</th>
+        <th class="table-date am-hide-sm-only">提交日期</th>
+        <th class="table-set">状态</th>
+        <th class="table-set">审核日期</th>
+        <th class="table-set">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <div class="table-group">
+        <?php foreach($agentList as $v):?>
+        <tr>
+            <td>{$v.id}</td>
+            <td>{$v.phone}</td>
+            <td>{$v.name}</td>
+            <td class="am-hide-sm-only">
+                <?php if($v['r_name']): ?>
+                {$v.r_name}({$v.r_user_no})
+                <?php else: ?>
+                全国总代
+                <?php endif; ?>
+            </td>
+            <td class="am-hide-sm-only">{$v.create_time}</td>
+            <td>未通过</td>
+            <td class="am-hide-sm-only">{$v.check_time}</td>
+            <td>
+                <?php if($status_type == 1): ?>
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs am-hide-sm-only" onclick="changeStatus('{$v.id}',1)"><span class="am-icon-copy"></span> 审核通过</button>
+                        <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="changeStatus('{$v.id}',-1)"><span class="am-icon-trash-o"></span> 审核未通过</button>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </div>
+    </tbody>
+</table>
+<div class="am-cf">
+
+    {$page}
+</div>
+<hr>
+
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+<script>
+    function changeStatus(id,type) {
+        $.ajax({
+            url:'/admin.php/Agent/changeAgentStatus',
+            type:'post',
+            data: {
+                type:type,
+                id:id
+            },
+            success:function (result){
+                if (result.status == 1){
+					layer.msg(result.msg);
+                    var url='/admin.php/Agent/search/p/{$pas}';
+                    var type = '{$status_type}'
+                    getAjaxData(url,type);
+                }
+            }
+        });
+    }
+</script>
+
+<?php break;endswitch;?>

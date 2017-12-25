@@ -1,0 +1,68 @@
+<extend name="Public:index" />
+<block name="main">
+    <ol class="am-breadcrumb">
+        <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+        <li class="am-active">广告管理</li>
+    </ol>
+    <div class="tpl-portlet-components">
+        <div class="tpl-block">
+            <div class="am-g">
+
+                <div class="am-u-sm-12">
+                    <form class="am-form">
+                        <table class="am-table am-table-striped am-table-hover table-main">
+                            <thead>
+                            <tr>
+                                <th style="width: 30%">广告名称</th>
+                                <th style="width: 40%">广告地址</th>
+                                <th style="width: 20%">商品图片</th>
+                                <th style="width: 10%">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach($list as $k=>$v): ?>
+                            <tr>
+                                <td>{$v.name}</td>
+                                <td>{$v.address}</td>
+                                <td>
+                                    <img src="{$v.image_url}" style="width: 50px;">
+                                </td>
+                                <td>
+                                    <button type="button" class="am-btn am-btn-default am-text-warning  am-btn-xs " onclick="delOp('{$v.id}')"><span class="am-icon-copy"></span> 删除</button>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <hr>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tpl-alert"></div>
+    <link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+    <script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+    <script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+    <script>
+        function delOp(aid) {
+            $.ajax({
+                url: '/admin.php/Advert/delOp',
+                type: 'post',
+                data: {
+                    aid: aid
+                },
+                success: function (result) {
+                    if (result.status == 1) {
+                        //layer.msg(result.msg);
+                        location.reload();
+                    } else {
+                        alert(result.msg);
+                    }
+                }
+            });
+        }
+
+    </script>
+</block>

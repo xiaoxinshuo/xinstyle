@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/index.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/swiper.min.css">
+    <script src="__PUBLIC__/Home/js/jquery-2.1.1.min.js"></script>
+    <script src="__PUBLIC__/Home/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#ckjj').one('click', function () {
+                /* alert('sorry，暂时停止奖金查询功能');
+                return; */
+                var tcBtn = $(this);
+                tcBtn.attr("id");
+                tcBtn.find("span").html("正在查询中…");
+                $.post("/index.php/Index/ajaxAward", null, function (res) {
+                    $("#dytdjjDiv").html('<i class="bigger"></i> <span class="ch show" style="display: inline-block;line-height: 60px;">当月团队奖金<b><br/>' + res.teamMoneyAward + '元</b></span>');
+                    $("#dygrjjDiv").html('<i class="bigger"></i> <span class="ch show" style="display: inline-block;line-height: 60px;">当月个人奖金<b><br/>' + res.selfAward + '元</b></span>');
+                    $("#monthyongjin").html('<i class="bigger"></i> <span class="ch show" style="display: inline-block;">当月佣金<b><br/>' + res.totalAward + '元</b></span>');
+                    tcBtn.find("span").html("查看奖金完成");
+                });
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .swiper-container {
+            height: 400px;
+        }
+        .swiper-slide {
+            background-position: center;
+            background-size: 100% 100%;
+        }
+
+    </style>
+</head>
+<body>
+<!-- 代码部分begin -->
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide" style="background-image:url(__PUBLIC__/Home/images/fei.png);"></div>
+        <div class="swiper-slide" style="background-image:url(__PUBLIC__/Home/images/fei.png);"></div>
+        <div class="swiper-slide" style="background-image:url(__PUBLIC__/Home/images/fei.png);"></div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<div>
+    <ul class="index-con">
+        <li class="in-kct in-course">
+            <a href="javascript:void(0);" title="当月佣金">
+                <div class="in-block" id="monthyongjin">
+                    <i class="bigger"></i>
+                    <span class="ch show" style="display: block;">
+               		当月佣金
+               			<b>
+                		<br/>
+						{$totalAward}
+						元
+						</b>
+               		</span>
+                </div>
+            </a>
+        </li>
+        <li class="in-kct in-quest">
+            <a href="javascript:void(0);" title="当月销量">
+                <div class="in-block">
+                    <i class="bigger"></i>
+                    <span class="ch show" style="display: block;">
+               		当月销量
+               			<b>
+                		<br/>
+						{$selfMonthSales}
+						元
+						</b>
+               		</span>
+                </div>
+            </a>
+        </li>
+        <li class="in-kct in-plan">
+            <a href="javascript:void(0);" title="累计销量">
+                <div class="in-block">
+                    <i class="bigger"></i>
+                    <span class="ch show" style="display: block;">
+                	累计销量
+                		<b>
+                		<br/>
+						{$selfAllSales}
+						元
+						</b>
+                	</span>
+                </div>
+            </a>
+        </li>
+
+        <li class="in-zxl in-forma">
+            <a href="javascript:void(0);" title="团队当日销量">
+                <div class="in-block">
+                    <i style="display: block;" class="hide"></i>
+                    <span style="display: inline-block;line-height: 60px;">团队日销<br>
+	                 	<b>
+						{$teamTodaySales}
+						元
+						</b>
+	                 </span>
+                    <i class="in-none toLeft0 toRight4" style="display: inline;"></i>
+                </div>
+            </a>
+        </li>
+        <li class="in-zxl in-means">
+            <a href="javascript:void(0);" title="团队当日销量">
+                <div class="in-block"><i class="hide" style="margin-left: 10px"></i>
+                    <span style="display: inline-block;line-height: 60px;">团队月销<br>
+						<b>
+						{$teamMonthSales}
+						元
+						</b>
+                   	<i class="in-none toRight3" style="display: inline;"></i>
+                    </span>
+                </div>
+            </a>
+        </li>
+    </ul>
+
+    <ul class="index-commission">
+        <li class="in-commission-kct in-team" style="width: 48.7%;">
+            <a href="javascript:void(0);" title="当月团队奖金">
+                <div class="in-block" id="dytdjjDiv"><i class="bigger"></i> <span class="ch show"
+                                                                                  style="display: inline-block;line-height: 60px;">当月团队奖金<b><br/>{$teamMoneyAward}</b></span>
+                </div>
+            </a>
+        </li>
+        <li class="in-commission-kct in-personal" style="width: 48.7%;">
+            <a href="javascript:void(0);" title="当月个人奖金">
+                <div class="in-block" id="dygrjjDiv"><i class="bigger"></i>
+                    <span class="ch show" style="display: inline-block;line-height: 60px;">当月个人奖金<b><br/>{$selfAward}</b></span>
+                </div>
+            </a>
+        </li>
+    </ul>
+
+    <!--<ul class="index-con" style="margin: -140px auto 0;">-->
+        <!--<li class="in-zxl in-forma">-->
+        <!--</li>-->
+        <!--<li class="in-zxl in-means">-->
+            <!--<a id="ckjj" href="javascript:void(0);" title="查看奖金" style="background: #9c9d98;">-->
+                <!--<div class="in-block"><i class="hide" style="margin: 40px -20px 0 33px;"></i>-->
+                    <!--<span style="display: inline-block;line-height: 60px;">-->
+                 	<!--点击查看奖金-->
+                 <!--</span>-->
+                <!--</div>-->
+            <!--</a>-->
+        <!--</li>-->
+        <!--<li class="in-jbk in-client">-->
+        <!--</li>-->
+    <!--</ul>-->
+
+    <!--<div class="annouce" style="margin-top: -250px;">-->
+        <!--<span class="icon-sound-alt"></span>-->
+        <!--<marquee direction="left" onclick="location.href='notifyList.html'" onMouseOut="this.start()">-->
+
+            <!--<span>8月中央环保稽查局到四川全面整治环评，许多厂被强行关闭，导致很多原材料、包材不能及时到货，导致部分产品断货，发货速度慢，急单勿拍。禁止囤货，偏远地区禁止购买冷吃，否则后果自负！夏季炎热，保质期短，放冰箱，尽快食用！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+
+        <!--</marquee>-->
+    <!--</div>-->
+</div>
+
+<ul class="footer2">
+    <li class="active" onclick="javascript:location.href='#'"><i class="home"></i><span>首页</span></li>
+    <li class="" onclick="javascript:location.href='/index.php/Order/goodsList'"><i class="order"></i><span>下单</span></li>
+    <li class="" onclick="javascript:location.href='/index.php/User/index'"><i class="mine"></i><span>我的</span></li>
+</ul>
+<script src="__PUBLIC__/Home/js/swiper.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: {
+            el: '.swiper-pagination',
+        },
+    });
+</script>
+</body>
+</html>

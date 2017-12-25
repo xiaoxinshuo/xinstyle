@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>新增订单</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui"/>
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<link rel="stylesheet" href="__PUBLIC__/Home/css/global.css">
+<link rel="stylesheet" href="__PUBLIC__/Home/css/order.css">
+<link rel="stylesheet" href="__PUBLIC__/Home/css/layer.css">
+<link rel="stylesheet" href="__PUBLIC__/Home/css/jquery.mloading.css">
+<style type="text/css">
+    .order-entry-name {
+        width: 25%
+    }
+    .order-entry-price {
+        width: 75%
+    }
+    .order-entry-price input, .order-entry-price select {
+        border: none;
+        height: 34px;
+        width: 100%;
+    }
+    #coupon-span {
+        float: right;
+    }
+    #coupon-paytype-2 span {
+        text-align: right;
+    }
+    #coupon-paytype-2 a {
+        color: #333333;
+        font-size: 16px;
+    }
+    #notUsedImg {
+        display: none;
+        width: 50px;
+        height: 30px;
+    }
+    #notUsedImg div {
+        background: url("");
+    }
+    #coupon-span label {
+        margin-right: 30px;
+    }
+</style>
+<script src="__PUBLIC__/Home/js/jquery.min.js"></script>
+<script src="__PUBLIC__/Home/js/jquery.mloading.js"></script>
+<script src="__PUBLIC__/Home/js/layer.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        select1();
+        $('#province').bind("change", select2);
+        $('#city').bind("change", select3);
+
+    });
+    var sub = true;
+
+    function submit() {
+        var old_address_id = $("#old_address_id").val();
+        if (old_address_id){
+
+        }else{
+            var name = $("#contact").val();
+            if (name == "") {
+                alert("收货人不能为空");
+                return;
+            }
+            var phone = $("#phone").val();
+            if (phone == "") {
+                alert("手机号不能为空");
+                return;
+            }
+            var mobile_reg = /^1[34578]\d{9}$/;
+
+            if (!mobile_reg.test(phone)) {
+                alert("手机号格式错误");
+                return;
+            }
+            if ($("#province").val() == "") {
+                alert("请选择省");
+                return;
+            }
+            if ($("#city").val() == "") {
+                alert("请选择市");
+                return;
+            }
+            if ($("#area").val() == "") {
+                alert("请选择区");
+                return;
+            }
+            var address = $("#address").val();
+            if (address == "") {
+                alert("详细地址不能为空");
+                return;
+            }
+        }
+        if (!sub) {
+            return;
+        }
+        sub = false;
+        $("body").mLoading();
+        $("#order_form").submit();
+        setTimeout(function () {
+            $("body").mLoading("hide");
+        }, 20000);
+        sub = true;
+    }
+
+    function selectAddress() {
+        layer.open({
+            type : 2,
+            title : false,
+            closeBtn : true,
+            shadeClose : false,
+            shade : 0.8,
+            area : [ '300px', '400px' ],
+            content : '/index.php/Order/offenAddressList'
+        });
+    }
+
+    function addressOk(id,name,phone,address){
+        $("#old_address_id").val(id);
+        $("#old_address_name").html(name);
+        $("#old_address_phone").html(phone);
+        $("#old_address_text").html(address);
+        $("#old_address_name_1").val(name);
+        $("#old_address_phone_1").val(phone);
+        $("#old_address_text_1").val(address);
+    }
+
+    function select1(){
+        $.ajax({
+            type: "post",
+            url: "{:U('user/provinceAjax')}",
+            success: function (msg) {
+                for (var i = 0; i < msg.length; i++) {
+                    $("#province").append("<option value=" + msg[i].id + ">" + msg[i].area_name + "</option>");
+                }
+                select2();
+            }
+        })
+    };
+    function select2() {
+        $("#city").html("");
+        $.ajax(
+            {
+                type: "post",
+                url: "{:U('user/cityAjax')}",
+                data: {province:$("#province").val()},
+                success: function (msg) {
+                    for (var i = 0; i < msg.length; i++) {
+                        $("#city").append("<option value=" + msg[i].id + ">" + msg[i].area_name + "</option>");
+                    }
+                    select3();
+                }
+            })
+    };
+
+    function select3() {
+        $("#county").html("");
+        $.ajax(
+            {
+                type: "post",
+                url: "{:U('user/countyAjax')}",
+                data: { "city":$("#city").val()},
+                success: function (msg) {
+                    for (var i = 0; i < msg.length; i++) {
+                        $("#county").append("<option value=" + msg[i].id + ">" + msg[i].area_name + "</option>");
+                    }
+                }
+            })
+    };
+</script>
+<script type="text/javascript">
+    //调用微信JS api 支付
+    function jsApiCall()
+    {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            {
+                'appId': <?php echo '"'.$jsApiParamArr['appId'].'"' ?>,
+                'timeStamp': <?php echo '"'.$jsApiParamArr['timeStamp'].'"' ?>,
+                'nonceStr': <?php echo '"'.$jsApiParamArr['nonceStr'].'"' ?>,
+                'package': <?php echo '"'.$jsApiParamArr['package'].'"' ?>,
+                'signType': <?php echo '"'.$jsApiParamArr['signType'].'"' ?>,
+                'paySign': <?php echo '"'.$jsApiParamArr['paySign'].'"' ?>,
+
+            },
+        function(res){
+            WeixinJSBridge.log(res.err_msg);
+        }
+        );
+    }
+
+    function callpay()
+    {
+        var old_address_id = $("#old_address_id").val();
+        var name = $("#contact").val();
+        var phone = $("#phone").val();
+        var province = $("#province").val();
+        var city = $("#city").val();
+        var county = $("#county").val();
+        var address = $("#address").val();
+        var remarks = $("#remarks").val();
+        var old_address_name = $("#old_address_name_1").val();
+        var old_address_phone = $("#old_address_phone_1").val();
+        var old_address_text = $("#old_address_text_1").val();
+        if (old_address_id){
+
+        }else{
+
+            if (name == "") {
+                alert("收货人不能为空");
+                return;
+            }
+
+            if (phone == "") {
+                alert("手机号不能为空");
+                return;
+            }
+            var mobile_reg = /^1[34578]\d{9}$/;
+
+            if (!mobile_reg.test(phone)) {
+                alert("手机号格式错误");
+                return;
+            }
+            if ($("#province").val() == "") {
+                alert("请选择省");
+                return;
+            }
+            if ($("#city").val() == "") {
+                alert("请选择市");
+                return;
+            }
+            if ($("#county").val() == "") {
+                alert("请选择区");
+                return;
+            }
+
+            if (address == "") {
+                alert("详细地址不能为空");
+                return;
+            }
+        }
+        $.ajax({
+            async: false,
+            type: "POST",
+            url:"{:U('Order/editOrderAddress')}",
+            data:{
+                order_id:$("#order_id").val(),
+                old_address_id:old_address_id,
+                old_address_name:old_address_name,
+                old_address_phone:old_address_phone,
+                old_address_text:old_address_text,
+                name:name,
+                phone:phone,
+                province:province,
+                city:city,
+                county:county,
+                address:address,
+                remarks:remarks
+            },
+            success: function(data) {
+                //var data=eval("("+data+")");
+                if (data.status == 1) {
+                    if (typeof WeixinJSBridge == "undefined"){
+                        if( document.addEventListener ){
+                            document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                        }else if (document.attachEvent){
+                            document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                            document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                        }
+                    }else{
+                        jsApiCall();
+                    }
+                };
+                if(data.status == 0){
+                    alert(data.msg);
+                }
+            }
+        });
+
+    }
+</script>
+<script type="text/javascript">
+    //获取共享地址
+    function editAddress()
+    {
+        WeixinJSBridge.invoke(
+            'editAddress',
+            {
+                'appId': <?php echo '"'.$editAddressArr['appId'].'"' ?>,
+                'timeStamp': <?php echo '"'.$editAddressArr['timeStamp'].'"' ?>,
+                'nonceStr': <?php echo '"'.$editAddressArr['nonceStr'].'"' ?>,
+                'scope': <?php echo '"'.$editAddressArr['scope'].'"' ?>,
+                'signType': <?php echo '"'.$editAddressArr['signType'].'"' ?>,
+                'addrSign': <?php echo '"'.$editAddressArr['addrSign'].'"' ?>,
+
+            },
+        function(res){
+            var value1 = res.proviceFirstStageName;
+            var value2 = res.addressCitySecondStageName;
+            var value3 = res.addressCountiesThirdStageName;
+            var value4 = res.addressDetailInfo;
+            var tel = res.telNumber;
+
+            //alert(value1 + value2 + value3 + value4 + ":" + tel);
+        }
+    );
+    }
+
+    window.onload = function(){
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', editAddress, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', editAddress);
+                document.attachEvent('onWeixinJSBridgeReady', editAddress);
+            }
+        }else{
+            editAddress();
+        }
+    };
+
+</script>
+</head>
+<body>
+<!-- 代码部分begin -->
+<form action="" id="order_form" method="post" style="padding-bottom: 65px;">
+
+    <div id="address-section">
+        <a class="address-field address-show j-address-recommend"
+           onclick="selectAddress()">
+            <p><span class="addr-name">请选择常用收货地址</span></p>
+        </a>
+    </div>
+    <div class="">
+        <p class="">
+            <input type="hidden" id="old_address_id" name="old_address_id">
+            <span class="" id="old_address_name"></span>
+            <input type="hidden" id="old_address_name_1" name="old_address_name">
+            <span class="" id="old_address_phone"></span>
+            <input type="hidden" id="old_address_phone_1" name="old_address_phone">
+        </p>
+        <p class="">
+            <span class="" id="old_address_text"></span>
+            <input type="hidden" id="old_address_text_1" name="old_address_text">
+        </p>
+    </div>
+
+    <div id="address-wrap" class="order-region">
+        <h1 class="order-region-title">收货地址</h1>
+        <ul class="order-region-entries" id="food-items">
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">收货人</span>
+                <span class="order-entry-price">
+			    	<input type="hidden" id="dish" name="dish" value="">
+			    	<input type="hidden" id="address.id" name="address.id" value="">
+			    	<input type="text" placeholder="收货人" id="contact" name="contact" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">电话</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="收货人电话" id="phone" name="phone" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">省</span>
+                <span class="order-entry-price">
+			    	<select id="province" name="province" data="">
+						<option value="">选择省</option>
+					</select>
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">市</span>
+                <span class="order-entry-price">
+			    	<select id="city" name="city" data="">
+						<option value="">选择市</option>
+					</select>
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">区</span>
+                <span class="order-entry-price">
+			    	<select id="county" name="county" data="">
+						<option value="">选择区</option>
+					</select>
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">详细地址</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="收货人地址" id="address" name="address" value="">
+			    </span>
+            </li>
+
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">备注</span>
+                <span class="order-entry-price">
+			    	<input type="text" placeholder="备注" id="remarks" name="remarks" value="">
+			    </span>
+            </li>
+        </ul>
+    </div>
+
+    <div id="choose-pay-wrap" class="order-region">
+        <ul id="choose-pay" class="order-region-entries pay-online">
+            <li id="order-paytype-2" class="order-region-entry">支付宝
+                <span class="j-order-payonline-discount order-payonline-discount borderradius-2"
+                      style="display: none;"></span>
+                <i class="i-circle icon-tickthick order-payonline-check "></i>
+            </li>
+        </ul>
+    </div>
+
+
+    <div id="order-foods-wrap" class="order-region">
+        <h1 class="order-region-title">商品信息</h1>
+        <ul class="order-region-entries" id="food-items">
+            <?php foreach($goodlist as $v): ?>
+            <li class="order-region-entry">
+                <span class="order-entry-price">￥{$v.total}</span>
+                <span class="order-entry-num">×{$v.number}</span>
+                <span class="order-entry-name text-overflow-ellipsis-2">{$v.good_name}</span>
+
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        <input type="hidden" id="order_weight" value="200">
+        <input type="hidden" id="order_cost_pirce" value="20.0">
+        <input type="hidden" id="order_id" name="order_id" value="{$order_id}">
+    </div>
+</form>
+<div class="order-btn-field">
+    <input id="order-submit" class="combtn order-btn" type="button" value="立即下单" onclick="callpay();">
+    <span id="order-total" class="order-total-field"><span class="order-total">￥{$money}</span>(含邮费{$postage})</span>
+</div>
+<!-- 代码部分end -->
+</body>
+</html>

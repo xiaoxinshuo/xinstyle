@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/global.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/mine.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/img.css">
+    <link href="__PUBLIC__/Home/css/font-awesome.min.css" rel="stylesheet"/>
+    <script src="__PUBLIC__/Home/js/jquery.min2.js"></script>
+    <script src="__PUBLIC__/Home/js/fly.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/js/jquery.qrcode.min.js"></script>
+    <script type="text/javascript">
+
+        window.onload = function () {
+
+
+            try {
+                document.createElement('canvas').getContext('2d');
+                var addDiv = document.createElement('div');
+                addDiv.innerHTML = '';
+                document.body.appendChild(addDiv);
+
+            } catch (e) {
+                // TODO: handle exception
+                var addDiv = document.createElement('div');
+                addDiv.innerHTML = '浏览器不支持canvas';
+
+                document.body.appendChild(addDiv);
+            }
+
+        }
+
+
+        $(document).ready(function () {
+            $(function () {
+                var qrcode = $('#code').qrcode("http://fzg.shandianbao.top/index.php/User/addAgent/uid/{$user_id}").hide();
+                var canvas = qrcode.find('canvas').get(0);
+                $("#test").attr('href', canvas.toDataURL('image/jpg'));
+                $("#img_two").attr('src', canvas.toDataURL('image/jpg'))
+            });
+
+        });
+
+    </script>
+
+    <style type="text/css">
+        .code1 {
+            display: none
+        }
+
+        .code2 {
+            display: inline;
+            width: 1px;
+            height: 1px;
+        }
+        .zhezhao{
+            position: relative;
+            display: inline-block;
+        }
+        .zhezhao span{
+            position: absolute;
+            top: 0;
+            left: 0;
+            line-height: 100px;
+            padding-left: 15px;
+            color: black;
+            font-size: 13px;
+        }
+        #img_two{
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+<!-- 代码部分begin -->
+<div class="ucenter-user">
+    <div class="zhezhao">
+    <a id="test" class="example" href="">
+        <img id="img_two" alt="我的二维码" sd="">
+        <span>查看二维码</span>
+    </a>
+    </div>
+    <div id="code"></div>
+    <p class="ucenter-username">{$name}</p>
+</div>
+<div class="ucenter-content" style="padding-bottom: 65px;">
+    <a class="ucenter-field" href="{:U('User/lowerAgent')}">
+        <i class="fa fa-users" style="margin: 0 10px 0 8px;"></i>下级代理
+        <i class="icon-arrow-right-thin"></i>
+    </a>
+    <a class="ucenter-field" href="{:U('User/addAgent')}">
+        <i class="fa fa-user-plus" style="margin: 0 10px 0 8px;"></i>添加代理
+        <i class="icon-arrow-right-thin"></i>
+    </a>
+
+    <a class="ucenter-field" href="{:U('User/mimeOrder')}">
+        <i class="fa fa-shopping-cart" style="margin: 0 10px 0 8px;"></i>我的订单
+        <i class="icon-arrow-right-thin"></i>
+    </a>
+    <a class="ucenter-field" href="{:U('User/addressList')}">
+        <i class="fa fa-truck" style="margin: 0 10px 0 8px;"></i>收货地址管理
+        <i class="icon-arrow-right-thin"></i>
+    </a>
+    <a class="ucenter-field" href="{:U('User/editUserInfo')}">
+        <i class="fa fa-credit-card" style="margin: 0 10px 0 8px;"></i>修改个人信息
+        <i class="icon-arrow-right-thin"></i>
+    </a>
+    <a class="ucenter-field" href="{:U('User/editPwd')}">
+        <i class="fa fa-edit" style="margin: 0 10px 0 8px;"></i>修改密码
+        <i class="icon-arrow-right-thin"></i>
+    </a>
+    <!-- <a class="ucenter-field" href="{:U('User/historicalBonus')}">
+        <i class="fa fa-money" style="margin: 0 10px 0 8px;"></i>历史奖金
+        <i class="icon-arrow-right-thin"></i>
+    </a> -->
+    <a class="ucenter-field" href="#" onclick="tuichu()"> <i
+            class="fa fa-close" style="margin: 0 10px 0 8px;"></i>退出
+        <i class="icon-arrow-right-thin"></i>
+    </a>
+
+</div>
+<ul class="footer2">
+    <li onclick="javascript:location.href='/index.php/Index/index'"><i class="home"></i><span>首页</span></li>
+    <li class=""
+        onclick="javascript:location.href='/index.php/Order/goodsList'"><i
+            class="order"></i><span>下单</span></li>
+    <li class="active"
+        onclick="javascript:location.href='#'"><i
+            class="mine"></i><span>我的</span></li>
+</ul>
+<!-- 代码部分end -->
+<script type="text/javascript">
+    window.easemobim = window.easemobim || {};
+    easemobim.config = {
+        //隐藏留言入口
+        ticket: false,
+        //下班后，不展示留言页面，不允许访客发送消息
+        offDutyType: 'none',
+        //下班提示语
+        offDutyWord: '现在是下班时间，不回复任何消息也不留言，请在上班时间咨询，敬请谅解！',
+        //访客信息，以下参数支持变量
+        visitor: {
+            trueName: '乔菲菲',
+            qq: '',
+            phone: '18931236601',
+            companyName: '',
+            userNickname: '乔菲菲－18931236601',
+            description: '',
+            email: ''
+        }
+    };
+</script>
+<script src='__PUBLIC__/Home/js/easemob.js'></script>
+<script src="__PUBLIC__/Home/js/jquery.imgbox.pack.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".example").imgbox({
+            'speedIn': 0,
+            'speedOut': 0,
+            'alignment': 'center',
+            'overlayShow': true,
+            'allowMultiple': false
+        });
+    });
+    
+    function tuichu() {
+        $.ajax({
+            url: '/index.php/Index/tuichu',
+            type: 'post',
+            data: {},
+            success: function (result) {
+                    location.href="/index.php/Index/login";
+            }
+        });
+    }
+</script>
+</body>
+</html>

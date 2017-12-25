@@ -1,0 +1,95 @@
+body {
+    position: relative;
+    min-height: 100%;
+    background-color: #f1f1f1;
+    color: #333333;
+}
+
+.address-add {
+    display: block;
+    height: 44px;
+    background-color: #fff;
+    margin-top: 15px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.address-add img {
+    float: left;
+    width: 15px;
+    height: 15px;
+    margin: 14px 8px 0 15px;
+}
+
+.address-add-font {
+    float: left;
+    line-height: 44px;
+    font-size: 15px;
+    color: #fe4d3d;
+}
+
+.address-list li {
+    border: 1px solid #ddd;
+    border-width: 1px 0;
+    margin-bottom: 15px;
+    padding: 0px 15px;
+    background-color: #fff;
+}
+
+.address-list li:first-child {
+    border-top: 0;
+}
+
+.address-info {
+    border-bottom: 1px solid #ddd;
+    padding: 12px 0 12px 25px;
+}
+
+.address-selected .address-info {
+    background: url("../images/address-right.png") no-repeat left 24px;
+    -webkit-background-size: 15px 15px;
+    -moz-background-size: 15px 15px;
+    background-size: 15px 15px;
+}
+
+.address-info p {
+    line-height: 22px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.address-info p.customer-info {
+    color: #333;
+}
+
+.contect-name {
+    margin-right: 10px;
+}
+
+.address-info p.address-dtl {
+    color: #898989;
+}
+
+.contect-button {
+    position: relative;
+    height: 44px;
+}
+
+.contect-button a {
+    position: absolute;
+    right: 0px;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #7b7d7c;
+    color: #7b7d7c;
+    border-radius: 4px;
+    margin-top: 6px;
+}
+
+.contect-button .dele {
+    right: 96px;
+}

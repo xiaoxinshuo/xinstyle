@@ -1,0 +1,61 @@
+<extend name="Public:index" />
+<block name="main">
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">佣金导出</li>
+</ol>
+
+<div class="tpl-portlet-components">
+    <div class="tpl-block">
+        <div class="am-g">
+            <form class="am-form-inline">
+                <div  style="display: inline-flex;" class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm', viewMode: 'years', minViewMode: 'months'}">
+                    <input style="border: 1px solid #c2cad8;"  type="text" id="startTime" class="am-form-field"  >
+                    <span class="am-input-group-btn am-datepicker-add-on">
+<button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+</span>
+                </div>
+                <!--<span>到</span>
+                <div  style="display: inline-flex;" class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm', viewMode: 'years', minViewMode: 'months'}">
+                    <input style="border: 1px solid #c2cad8;"  type="text" class="am-form-field"  >
+                    <span class="am-input-group-btn am-datepicker-add-on">
+<button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+</span>
+                </div>-->
+                <button type="button" class="am-btn am-btn-sm am-btn-warning export">导出excel</button>
+            </form>
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
+<div class="tpl-alert"></div>
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+<script>
+    $(".export").bind("click",function(){
+        var from = $('#startTime').val();
+        //var to = $('#endTime').val();
+
+        var cha='';
+        if(from!=''){
+            cha+='/from/'+from;
+        }else{
+            layer.msg('请选择月份');
+			return false;
+        }
+        /*if(to!=''){
+            cha+='/to/'+to;
+        }
+        cha+='/pay_status/'+pay_status;*/
+
+        location.href="/admin.php/Commission/export"+cha;
+    });
+</script>
+</block>

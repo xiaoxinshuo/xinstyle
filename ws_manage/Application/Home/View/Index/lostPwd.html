@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>忘记密码</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no,minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/order.css">
+    <link rel="stylesheet" href="css/order-detail.css">
+    <style type="text/css">
+    .order-entry-name{width: 30%}
+    .order-entry-price{width: 70%}
+    .order-entry-price input,.order-entry-price select{
+     	border:none;height: 34px;width: 100%;
+     }
+    </style>
+    <script src="/static/a/js/jquery.min.js"></script>
+	<script type="text/javascript">
+		var sub = true;
+		function submit(){
+	    	var loginName=$("#loginName").val();
+	    	if(loginName==""){
+	    		alert("手机号不能为空");
+	    		return;
+	    	}
+	    	var mobile_reg=/^1[34578]\d{9}$/;
+	        if(!mobile_reg.test(loginName)){
+	    		alert("手机号格式错误");
+	    		return;
+	        }
+	        var vcode=$("#vcode").val();
+	    	if(vcode==""){
+	    		alert("验证码不能为空");
+	    		return;
+	    	}
+	    	var password=$("#password").val();
+	    	if(password==""){
+	    		alert("密码不能为空");
+	    		return;
+	    	}
+	    	if(password.length <=5){
+	    		alert("密码必须不小于6位");
+	    		return;
+	    	}
+
+	    	var verifyPassword=$("#verifyPassword").val();
+	    	if(verifyPassword==""){
+	    		alert("确认密码不能为空");
+	    		return;
+	    	}
+	    	if(verifyPassword != password){
+	    		alert("确认密码必须和密码相同");
+	    		return;
+	    	}
+	    	
+			if(!sub){
+				return;
+			}
+			sub = false;
+	    	$.post("/a/mobile/forget/pwd",$("#pwd_form").serialize(),function(data){
+	    		sub = true;
+	    		if(data.success == true){
+	    			alert(data.msg);
+	    			location.href="/a";
+	    		}else{
+	    			alert(data.msg);
+	    		}
+	    	});
+	    }
+		
+		//开始倒计时
+		function settime(obj,countdown) { 
+		    if (countdown == 0) {
+		        obj.removeAttr("disabled"); 
+		        obj.removeClass("disabled");   
+		        obj.val("获取验证码"); 
+		        return;
+		    } else {
+		        obj.val("重新发送(" + countdown + ")"); 
+		        countdown--;
+		    } 
+		    setTimeout(function() { settime(obj,countdown) },1000) 	// 每1000毫秒执行一次
+		} 
+
+
+		/**
+		 * Todo 点击发送验证码
+		 * @param obj 被点击按钮
+		 * @param account 发送验证码账号
+		 * @param accountType 1-手机 2邮箱
+		 * @param countdown 倒计时秒数
+		 */
+		function sendVCode(obj,accountInputId,countdown){
+			var account = $("#"+accountInputId).val();
+			if(account == ""){
+				alert("请输入手机号码");
+				return;
+			}
+			if(!validatorPhone(account)){
+				alert("手机号码格式错误");
+				return;
+			}
+			$(obj).addClass("disabled");
+			$(obj).attr("disabled", true); 
+			$(obj).val("发送中...");
+			$.post("/a/mobile/send/sendVCode",{phone:account,type:2}, function(data){
+				console.log(data);
+				if(data.success == true){
+		    		settime($(obj),countdown);//开始倒计时
+				}else{
+					alert("获取验证码失败，请稍后再试");
+					$(obj).removeClass("disabled");
+					$(obj).attr("disabled", false); 
+					$(obj).val("重新获取");
+				}
+			});
+			
+		}
+		// 验证是否是电话号码
+		function validatorPhone(phone){
+			var phoneRegex = /^1[34578]\d{9}$/;
+		    return phoneRegex.test(phone);
+		}
+		
+	</script>    
+</head>
+<body>
+<header id="header" class="header page-header">
+    <a class="j-back-link back-wrap" href="login.html" >
+    	<i class="icon i-back"></i><span class="goback">返回</span>
+    </a>
+    <h1 class="j-page-name page-name">忘记密码</h1>
+</header>
+<!-- 代码部分begin -->
+<form action="/a/mobile/mine/update/pwd" id="pwd_form" method="post">
+    <div id="address-wrap" class="order-region">
+        <ul class="order-region-entries" id="food-items">
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*手机号</span>
+			    <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写原密码" id="loginName" name="loginName" value="">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*验证码</span>
+			    <span class="order-entry-price">
+			    	<input type="text" placeholder="请填写验证码" id="vcode" name="vcode" value="">
+			    	<input type="button"  id="vcodebtn" name="vcodebtn" value="获取验证码" onclick="sendVCode(this,'loginName',120)">
+			    </span>
+            </li>
+            <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*密码</span>
+			    <span class="order-entry-price">
+			    	<input type="password" placeholder="请填写密码" id="password" name="password" value="">
+			    </span>
+            </li>
+             <li class="order-region-entry">
+                <span class="order-entry-name text-overflow-ellipsis-2">*确认密码</span>
+			    <span class="order-entry-price">
+			    	<input type="password" placeholder="请填写确认密码" id="verifyPassword" name="verifyPassword" value="">
+			    </span>
+            </li>
+        </ul>
+    </div>
+</form>
+<div class="order-btn-field">
+    <input id="order-submit" class="combtn order-btn" type="button" value="保存" onclick="submit();">
+</div>
+<!-- 代码部分end -->
+</body>
+</html>

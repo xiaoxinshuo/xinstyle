@@ -1,0 +1,194 @@
+<extend name="Public:index" />
+<block name="main">
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">佣金规则</li>
+</ol>
+
+<div class="tpl-portlet-components">
+    <div class="tpl-block">
+        <div class="am-g">
+            <button
+                    type="button"
+                    class="am-btn am-btn-primary"
+                    data-am-modal="{target: '#doc-modal-1', closeViaDimmer: 0, width: 400, height: 225}">
+                新增规则
+            </button>
+
+            <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+                <div class="am-modal-dialog" style="width: 500px !important;">
+                    <div class="am-modal-hd">新增规则
+                        <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+                    </div>
+                    <br>
+                    <div class="am-modal-bd">
+                      <form class="am-form am-form-horizontal">
+                          <div class="am-form-group">
+
+                              <div class="am-u-sm-3">
+                                  <input type="text" id="new_start" placeholder="起点">
+                              </div>
+                              <label  class="am-u-sm-3 am-form-label" style="font-size: 13px"><=业绩<</label>
+                              <div class="am-u-sm-3">
+                                  <input type="text" id="new_end" placeholder="终点">
+                              </div>
+                              <div class="am-u-sm-3">
+                                  <input type="text" id="new_rate" placeholder="比例">
+                              </div>
+                          </div>
+                              <button class="am-btn am-btn-primary am-btn-sm" type="button" onclick="save()">确认</button>
+
+                      </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-modal am-modal-no-btn am-modal-active" style="display: none;" id="model_edit">
+                <div class="am-modal-dialog" style="width: 400px; height: 225px;">
+                    <div class="am-modal-hd">编辑规则
+                        
+                    </div>
+                    <br>
+                    <div class="am-modal-bd">
+                        <form class="am-form am-form-horizontal">
+                            <div class="am-form-group">
+
+                                <div class="am-u-sm-3">
+                                    <input type="text" id="edit_start" value="">
+                                </div>
+                                <label  class="am-u-sm-3 am-form-label" style="font-size: 13px"><=业绩<</label>
+                                <div class="am-u-sm-3">
+                                    <input type="text" id="edit_end" value="">
+                                </div>
+                                <div class="am-u-sm-3">
+                                    <input type="text" id="edit_rate" value="">
+                                </div>
+                                <input type="hidden" id="edit_id" value="">
+                            </div>
+                            <button class="am-btn am-btn-primary am-btn-sm" type="button" onclick="editSave()">确认</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+                <div class="am-u-sm-12 ">
+                    <form class="am-form">
+                        <table class="am-table am-table-striped am-table-hover table-main">
+                            <thead>
+                            <tr>
+                                <th class="table-title">起点（大于等于）</th>
+                                <th class="table-type">终点（小于）</th>
+                                <th class="table-type">比例（百分比）</th>
+                                <th class="table-type">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach($list as $v): ?>
+                            <tr>
+                                <td>{$v.start}</td>
+                                <td>{$v.end}</td>
+                                <td class="am-hide-sm-only">{$v.rate}%</td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary" type="button" onclick="edit('{$v.id}','{$v.start}','{$v.end}','{$v.rate}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                            <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only" type="button" onclick="del('{$v.id}')"><span class="am-icon-copy"></span> 删除</button>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <hr>
+
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+</div>
+<div class="tpl-alert"></div>
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+<script>
+    function save() {
+        var start = $("#new_start").val();
+        var end = $("#new_end").val();
+        var rate = $("#new_rate").val();
+        $.ajax({
+            url: '/admin.php/Commission/addOp',
+            type: 'post',
+            data: {
+                start:start,
+                end:end,
+                rate:rate
+            },
+            success: function (result) {
+                if (result.status == 1) {
+                    layer.msg(result.msg);
+                    location.reload();
+                } else {
+                    layer.msg(result.msg);
+                }
+            }
+        });
+
+    }
+
+    function edit(id,start,end,rate) {
+        $("#edit_start").val(start);
+        $("#edit_end").val(end);
+        $("#edit_rate").val(rate);
+        $("#edit_id").val(id);
+        $("#model_edit").css("display","block");
+    }
+    function editSave() {
+        var start = $("#edit_start").val();
+        var end = $("#edit_end").val();
+        var rate = $("#edit_rate").val();
+        var id = $("#edit_id").val();
+        $.ajax({
+            url: '/admin.php/Commission/editOp',
+            type: 'post',
+            data: {
+                id: id,
+                start: start,
+                end: end,
+                rate: rate
+            },
+            success: function (result) {
+                if (result.status == 1) {
+                    layer.msg(result.msg);
+                    location.reload();
+                } else {
+                    layer.msg(result.msg);
+                }
+            }
+        });
+    }
+
+    function del(id) {
+        $.ajax({
+            url: '/admin.php/Commission/delOp',
+            type: 'post',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                if (result.status == 1) {
+                    layer.msg(result.msg);
+                    location.reload();
+                } else {
+                    layer.msg(result.msg);
+                }
+            }
+        });
+    }
+
+</script>
+</block>

@@ -1,0 +1,107 @@
+<extend name="Public:index" />
+<block name="main">
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">物流管理</li>
+</ol>
+<div class="tpl-portlet-components">
+    <div class="tpl-block ">
+
+        <div class="am-g tpl-amazeui-form">
+
+
+            <div class="am-u-sm-12 am-u-md-9">
+                <form class="am-form am-form-horizontal">
+                    <div class="am-form-group">
+                        <label  class="am-u-sm-3 am-form-label">初始运费</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="initial_postage" value="{$initial_postage}" placeholder="输入初始运费">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">初始商品数量</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="initial_good_num" value="{$initial_good_num}" placeholder="输入初始商品数量">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">超标运费</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="overstep_postage" value="{$overstep_postage}" placeholder="输入超标运费">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">超标商品数量</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="overstep_good_num" value="{$overstep_good_num}" placeholder="输入超标商品数量">
+                        </div>
+                    </div>
+
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="button" class="am-btn am-btn-primary" onclick="save()">确认</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<link rel="stylesheet" href="__PUBLIC__/Admin/assets/css/layer.css" />
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script src="__PUBLIC__/Admin/assets/js/layer.js"></script>
+<script>
+
+    function save() {
+        var initial_postage = $('#initial_postage').val();
+        var initial_good_num = $('#initial_good_num').val();
+        var overstep_postage = $('#overstep_postage').val();
+        var overstep_good_num = $('#overstep_good_num').val();
+        if(initial_postage==''){
+            layer.msg('请填写初始运费');
+            return false;
+        }
+        if(initial_good_num==''){
+            layer.msg('请填写初始商品数量');
+            return false;
+        }
+        if(overstep_postage==''){
+            layer.msg('请填写超标运费');
+            return false;
+        }
+        if(overstep_good_num==''){
+            layer.msg('请填写超标商品数量');
+            return false;
+        }
+        $.ajax({
+            url:'/admin.php/Goods/wuliuOp',
+            type:'post',
+            data:
+                {
+                    initial_postage:initial_postage,
+                    initial_good_num:initial_good_num,
+                    overstep_postage:overstep_postage,
+                    overstep_good_num:overstep_good_num
+                },
+            success:function (result){
+                if (result.status == 1){
+                    layer.msg('保存成功');
+                    location.reload();
+                }else{
+                    layer.msg('保存失败');
+                }
+
+
+            }
+        });
+    }
+
+    function search(){
+        var url='/admin.php/Commission/ajaxGet/p/1';
+        getAjaxData(url);
+    }
+</script>
+</block>

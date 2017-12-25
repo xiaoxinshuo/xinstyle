@@ -1,0 +1,61 @@
+<extend name="Public:index" />
+<block name="main">
+
+<ol class="am-breadcrumb">
+    <li><a href="{:U('Index/index')}" class="am-icon-home">首页</a></li>
+    <li class="am-active">代理审核</li>
+</ol>
+<div class="tpl-portlet-components">
+    <div class="tpl-block">
+        <div class="am-g">
+
+            <div data-am-widget="tabs" class="am-tabs am-tabs-d2">
+                <ul class="am-tabs-nav am-cf">
+                    <li class="am-active"><a onclick="searchType('1')">待审核</a></li>
+                    <li class=""><a onclick="searchType('-1')">未通过</a></li>
+                </ul>
+                <div class="am-tabs-bd">
+
+                <div  class="am-u-sm-12">
+                    <form class="am-form">
+
+
+                    </form>
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tpl-alert"></div>
+</div>
+<script src="__PUBLIC__/Admin/assets/js/jquery-3.2.1.min.js"></script>
+<script>
+    void function () {
+        var url='/admin.php/Agent/search/p/{$pas}';
+        getAjaxData(url,1);
+    }();
+
+    function getAjaxData(url,type) {
+        $.ajax({
+            url:url,
+            type:'get',
+            data: {
+                status:type
+            },
+            success:function (result){
+                $('.am-form').html(result);
+            }
+        });
+    }
+
+    function searchType(type){
+        var url='/admin.php/Agent/search/p/1';
+        getAjaxData(url,type);
+    }
+</script>
+
+</block>
+
+
+
